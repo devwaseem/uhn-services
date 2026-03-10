@@ -1,0 +1,5 @@
+{% if form.non_field_errors %}
+  <div class="p-4 text-red-500 rounded-lg bg-red-500/20">
+    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+  </div>
+{% endif %}

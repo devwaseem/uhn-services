@@ -1,0 +1,12 @@
+{% extends "layouts/base/index.html" %}
+{% block body %}
+    <main class="bg-base-200 min-h-screen p-4 sm:p-6">
+        <section class="card mx-auto mt-10 w-full max-w-md p-6 sm:mt-16 sm:p-8">
+            <h1 class="text-base-content text-2xl font-semibold tracking-tight">Password updated</h1>
+            <p class="text-muted-content mt-3 text-sm">Your password has been changed successfully.</p>
+            <p class="text-muted-content mt-6 text-center text-sm">
+                <a href="{% url 'account_login' %}" class="btn btn-link">Continue to sign in</a>
+            </p>
+        </section>
+    </main>
+{% endblock body %}

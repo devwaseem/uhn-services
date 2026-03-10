@@ -1,0 +1,12 @@
+<div class="card {{ class }}">
+    {% if image %}
+        <figure>
+            <img src="{{ image }}" alt="{{ alt|default:'' }}" width="640" height="360" />
+        </figure>
+    {% endif %}
+    <div class="card-body {{ body_class }}">
+        {% if title %}<h2 class="card-title">{{ title }}</h2>{% endif %}
+        {{ slot }}
+        {% if actions %}<div class="card-actions justify-end">{{ actions }}</div>{% endif %}
+    </div>
+</div>

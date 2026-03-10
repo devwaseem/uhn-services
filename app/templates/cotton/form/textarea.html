@@ -1,0 +1,10 @@
+{% load widget_tweaks %}
+<c-form-field-wrapper
+  field="{{ field }}"
+  class="{{ class|default:'' }}"
+  hide_label="{{ hide_label|default:'' }}"
+  label_class="{{ label_class|default:'' }}"
+  show_required_indicator="{{ show_required_indicator|default:'' }}"
+  help_text_classes="{{ help_text_classes|default:'' }}">
+  {% render_field field|add_error_class:"ring-red-500" class=input_class rows=rows data-loading-class="cursor-wait" data-loading-disable="true" %}
+</c-form-field-wrapper>

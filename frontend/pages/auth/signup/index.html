@@ -1,0 +1,25 @@
+{% extends "layouts/base/index.html" %}
+{% block body %}
+    <main class="bg-base-200 min-h-screen p-4 sm:p-6">
+        <section class="card mx-auto mt-10 w-full max-w-md p-6 sm:mt-16 sm:p-8">
+            <h1 class="text-base-content text-2xl font-semibold tracking-tight">Create account</h1>
+            <p class="text-muted-content mt-2 text-sm">Use your email address to register.</p>
+            <form method="post" action="{% url 'account_signup' %}" class="mt-6 space-y-4">
+                {% csrf_token %}
+                {% include "components/form/non_field_errors.html" with form=form %}
+                {% include "components/form/hidden_fields.html" with form=form %}
+                {% for field in form.visible_fields %}
+                    {% include "components/form/input.html" with field=field input_class="input" %}
+                {% endfor %}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <button type="submit" class="btn btn-primary w-full justify-center">Create account</button>
+            </form>
+            <p class="text-muted-content mt-6 text-center text-sm">
+                Already have an account?
+                <a href="{% url 'account_login' %}" class="btn btn-link">Sign in</a>
+            </p>
+        </section>
+    </main>
+{% endblock body %}

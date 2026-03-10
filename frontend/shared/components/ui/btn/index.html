@@ -1,0 +1,5 @@
+<button class="btn {{ class }}{% if variant %} btn-{{ variant }}{% endif %}{% if size %} btn-{{ size }}{% endif %}{% if outline %} btn-outline{% endif %}" {% if type %}type="{{ type }}" {% else %}type="button" {% endif %} {{ attrs }}>
+    {% if icon_left %}<span class="mr-2">{{ icon_left }}</span>{% endif %}
+    {{ slot }}
+    {% if icon_right %}<span class="ml-2">{{ icon_right }}</span>{% endif %}
+</button>

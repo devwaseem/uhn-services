@@ -1,0 +1,13 @@
+<div class="form-control w-full {{ wrapper_class }}">
+    {% if label %}
+        <label class="label">
+            <span class="label-text">{{ label }}</span>
+        </label>
+    {% endif %}
+    <input type="{{ type|default:'text' }}" class="input {{ class }}{% if variant %} input-{{ variant }}{% endif %}" {% if placeholder %}placeholder="{{ placeholder }}"{% endif %} {% if value %}value="{{ value }}"{% endif %} {% if name %}name="{{ name }}"{% endif %} {{ attrs }} />
+    {% if help_text %}
+        <label class="label">
+            <span class="label-text-alt">{{ help_text }}</span>
+        </label>
+    {% endif %}
+</div>

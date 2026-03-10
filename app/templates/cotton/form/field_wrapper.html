@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+<div class="{% if field.field.disabled %} opacity-70 [&>input]:bg-gray-100 [&>input]:cursor-not-allowed{% endif %} flex {% if field.field.widget.input_type == "checkbox" %}flex-row items-center gap-3{% else %}flex-col gap-2{% endif %} {{ class|default:"" }}">
+  {% if not hide_label and field.field.widget.input_type != "hidden" %}
+    <label for="{{ field.id_for_label }}"
+           class="{% if field.errors %} text-red-500{% endif %} text-sm {{ label_class|default:"" }} {% if field.field.widget.input_type == 'checkbox' %}order-2{% endif %}">
+      {{ field.label }}
+      {% if field.field.required and show_required_indicator %}<span class="text-red-600 text-sm">*</span>{% endif %}
+      {% if field.field.required and not field.field.disabled %}<span class="text-sm text-red-500">*</span>{% endif %}
+    </label>
+  {% endif %}
+  {% block input_field %}
+    {{ slot }}
+  {% endblock input_field %}
+  {% if field.help_text %}
+    <div class="text-sm text-gray-500 [&>ul]:flex [&>ul]:flex-col [&>ul]:gap-2 {{ help_text_classes|default:"" }}">
+      {{ field.help_text }}
+    </div>
+  {% endif %}
+  {% for error in field.errors %}<span class="text-red-500 text-sm">{{ error }}</span>{% endfor %}
+</div>

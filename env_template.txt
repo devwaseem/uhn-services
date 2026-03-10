@@ -1,0 +1,121 @@
+# Django - General
+DEBUG=false
+# WARNING: generate a secure random value for production
+SECRET_KEY=replace-me
+BASE_URL=
+
+PYTHONBREAKPOINT="ipdb.set_trace"
+ENABLE_HEALTH_CHECK=true
+ENABLE_SILK_PROFILING=false
+ENABLE_CPROFILE=false
+ENABLE_PYINSTRUMENT=false
+ENABLE_SENTRY=true
+ENABLE_OTEL=false
+
+# OpenTelemetry
+OTEL_SDK_DISABLED=false
+OTEL_SERVICE_NAME=uhn_services
+OTEL_SERVICE_NAMESPACE=uhn_services
+OTEL_RESOURCE_ATTRIBUTES=deployment.environment=development
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_EXPORTER_OTLP_HEADERS=
+OTEL_EXPORTER_OTLP_TIMEOUT=30
+OTEL_TRACES_SAMPLER=parentbased_traceidratio
+OTEL_TRACES_SAMPLER_ARG=0.1
+OTEL_METRIC_EXPORT_INTERVAL=60000
+OTEL_PYTHON_DJANGO_EXCLUDED_URLS=healthz/,readyz/
+
+# OpenTelemetry collector forwarding (optional)
+OTEL_BACKEND_ENDPOINT=
+OTEL_BACKEND_AUTH_HEADER=
+
+
+DJANGO_STATIC_HOST=
+DJANGO_MEDIA_HOST=
+STATIC_LOCATION=
+STATIC_USE_WHITENOISE=false
+STATIC_USE_S3=false
+MEDIA_USE_S3=false
+
+
+# Security
+# Comma-separated list for production, e.g. example.com,api.example.com
+ALLOWED_HOSTS=
+CSRF_TRUSTED_ORIGINS=
+# Enable in production
+USE_SSL=false
+USE_X_FORWARDED_HOST=false
+# Runtime protections (production defaults shown)
+SECURE_REFERRER_POLICY=strict-origin-when-cross-origin
+SECURE_CROSS_ORIGIN_OPENER_POLICY=same-origin
+SECURE_CROSS_ORIGIN_EMBEDDER_POLICY=credentialless
+SECURE_CROSS_ORIGIN_RESOURCE_POLICY=same-site
+
+
+# Django AWS
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_STORAGE_BUCKET_NAME=
+AWS_S3_REGION_NAME=
+
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+
+# Caddy
+DOMAIN_NAME=localhost:8000
+SSL_EMAIL=
+
+
+# Email
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+EMAIL_PORT=1025
+EMAIL_USE_TLS=false
+DEFAULT_FROM_EMAIL="UHN Services <admin@example.com>"
+SERVER_EMAIL="UHN Services <system@example.com>"
+
+
+# Database
+DJANGO_DATABASE_HOST=localhost
+DJANGO_DATABASE_PORT=5432
+POSTGRES_DB=uhn_services
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+CONN_MAX_AGE=60
+
+
+# PGBOUNCER
+DB_HOST=postgres
+DB_NAME=uhn_services
+DB_USER=postgres
+DB_PASSWORD=postgres
+AUTH_TYPE=plain
+
+
+# Celery
+CELERY_BROKER_URL="redis://localhost:6379/1"
+CELERY_RESULT_BACKEND="redis://localhost:6379/1"
+
+
+# Gunicorn
+GUNICORN_WORKERS=1
+GUNICORN_APPLICATION=uhn_services.wsgi:application
+GUNICORN_WORKER_CLASS="sync" # sync | gevent
+GUNICORN_WORKER_CONNECTIONS=100
+GUNICORN_MAX_REQUESTS=2000
+GUNICORN_REQUESTS_JITTER=400
+
+
+# Sentry
+SENTRY_DSN=
+SENTRY_TRACES_SAMPLE_RATE=
+
+# Feature Flags
+ACCOUNT_ALLOW_REGISTRATION=true
+SITE_ID=1

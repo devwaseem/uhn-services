@@ -1,0 +1,108 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "dev",
+            "type": "shell",
+            "command": "LOG_DB=true uv run python manage.py runserver_plus 0.0.0.0:8000",
+            "problemMatcher": []
+        },
+        {
+            "label": "vite",
+            "type": "shell",
+            "command": "npm run dev",
+            "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "DISABLE_LOGGING=true TEST=true PYTHONBREAKPOINT=ipdb.set_trace uv run pytest -s",
+            "problemMatcher": []
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "uv run pre-commit run --all-files",
+            "problemMatcher": []
+        },
+        {
+            "label": "type",
+            "type": "shell",
+            "command": "uv run mypy app",
+            "problemMatcher": []
+        },
+        {
+            "label": "celery",
+            "type": "shell",
+            "command": "LOG_DB=true uv run watchmedo auto-restart --directory=app --recursive --pattern '*.py' -- -- celery --app app worker -E -l INFO -Q celery --pool gevent --concurrency 20",
+            "problemMatcher": []
+        },
+        {
+            "label": "celery-beat",
+            "type": "shell",
+            "command": "LOG_DB=true uv run celery --app app beat -l INFO",
+            "problemMatcher": []
+        },
+        {
+            "label": "flower",
+            "type": "shell",
+            "command": "LOG_DB=true uv run celery --app app flower",
+            "problemMatcher": []
+        },
+        {
+            "label": "makemigrations",
+            "type": "shell",
+            "command": "uv run python manage.py makemigrations",
+            "problemMatcher": []
+        },
+        {
+            "label": "migrate",
+            "type": "shell",
+            "command": "uv run python manage.py migrate",
+            "problemMatcher": []
+        },
+        {
+            "label": "dbshell",
+            "type": "shell",
+            "command": "uv run python manage.py dbshell",
+            "problemMatcher": []
+        },
+        {
+            "label": "notebook",
+            "type": "shell",
+            "command": "LOG_DB=true DJANGO_ALLOW_ASYNC_UNSAFE=true uv run python manage.py shell_plus --notebook --no-browser",
+            "problemMatcher": []
+        },
+        {
+            "label": "shell",
+            "type": "shell",
+            "command": "uv run python manage.py shell_plus",
+            "problemMatcher": []
+        },
+        {
+            "label": "up",
+            "type": "shell",
+            "command": "docker-compose -f development.yml up -d",
+            "problemMatcher": []
+        },
+        {
+            "label": "stop",
+            "type": "shell",
+            "command": "docker-compose -f development.yml stop",
+            "problemMatcher": []
+        },
+        {
+            "label": "down",
+            "type": "shell",
+            "command": "docker-compose -f development.yml down",
+            "problemMatcher": []
+        },
+        {
+            "label": "docker-shell",
+            "type": "shell",
+            "command": "docker-compose -f development.yml exec",
+            "args": ["${input:CONTAINER_NAME}", "bash"],
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,435 @@
+[project]
+name = "project"
+version = "0.1.0"
+description = ""
+authors = [{ name = "Waseem akram", email = "waseem07799@gmail.com" }]
+requires-python = ">=3.14,<3.15"
+readme = "README.md"
+dependencies = [
+  "Django[argon2]>=6.0,<7",
+  "argon2-cffi>=25,<26",
+  "boto3>=1.42,<2",
+  "celery>=5.6.0,<6",
+  "django-admin-interface>=0.31.1,<1",
+  "django-allauth>=65.13.1,<66",
+  "django-anymail>=13,<14",
+  "django-browser-reload>=1.21.0,<2",
+  "django-cotton==2.6.1",
+  "django-constance>=4.3.4,<5",
+  "django-environ>=0.12,<0.20",
+  "django-feather>=0.3.0,<0.4",
+  "django-filter~=24.2",
+  "django-frontend-kit<1.0.0",
+  "django-health-check>=3.20,<4",
+  "django-htmx>=1.27,<2",
+  "django-ipware>=7.0.1,<8",
+  "django-lifecycle>=1.2.3,<2",
+  "django-model-utils>=5.0,<6",
+  "django-nested-admin>=4.1.6,<5",
+  "django-object-actions>=5.0,<6",
+  "django-permissions-policy>=4.28.0,<5",
+  "django-phonenumber-field[phonenumberslite]>=8.4,<9",
+  "django-ratelimit>=4.1.0,<5",
+  "django-redis>=6.0,<7",
+  "django-render-block>=0.11,<1",
+  "django-solo>=2.3.0,<3",
+  "django-storages[boto3]>=1.14.6,<2",
+  "django-structlog>=4.0.1,<5",
+  "django-unfold>=0.74.1,<1",
+  "django-widget-tweaks>=1.4.12,<2",
+  "filelock>=3.20.1,<4",
+  "gevent>=25.9,<26",
+  "gunicorn>=23,<24",
+  "hiredis>=3.3.0,<4",
+  "jinja2>=3.1.6,<4",
+  "mjml-python>=1.3.7",
+  "numerize>=0.12,<0.13",
+  "opentelemetry-api>=1.38,<2",
+  "opentelemetry-exporter-otlp-proto-http>=1.38,<2",
+  "opentelemetry-instrumentation-celery>=0.60b1,<1",
+  "opentelemetry-instrumentation-django>=0.60b1,<1",
+  "opentelemetry-instrumentation-logging>=0.60b1,<1",
+  "opentelemetry-instrumentation-psycopg>=0.60b1,<1",
+  "opentelemetry-instrumentation-redis>=0.60b1,<1",
+  "opentelemetry-sdk>=1.38,<2",
+  "psycopg[binary]>=3.1.18,<4",
+  "pydantic>=2.12,<3",
+  "python-dateutil>=2.8.2,<3",
+  "requests>=2.32.4,<3",
+  "redis>=7.1,<8",
+  "rich>=14.2,<15",
+  "sentry-sdk[django]>=2.47,<3",
+  "structlog>=25.5.0,<26",
+  "tenacity>=9.1.2,<10",
+  "types-python-dateutil>=2.8.19.3,<3",
+  "urllib3>=2.6.3,<3",
+  "uvicorn[standard]>=0.38.0,<1",
+  "virtualenv>=20.36.1,<21",
+  "whitenoise[brotli]>=6.11,<7",
+  "django-extensions>=4.1,<5",
+  "django-stubs[compatible-mypy]>=5.2",
+  "django-stubs-ext>=5.2,<6",
+]
+
+
+[dependency-groups]
+dev = [
+    { include-group = "test" },
+    { include-group = "types" },
+    { include-group = "code-checks" },
+    "debugpy>=1.8.9,<2",
+    "django-debug-toolbar-template-profiler>=2.1.0,<3",
+    "django-debug-toolbar>=5.0,<6",
+    "django-extensions>=4.1",
+    "django-silk>=5.0.2,<6",
+    "djhtml>=3.0.6,<4",
+    "fabric2>=3.0.0,<4",
+    "flower>=2.0.1,<3",
+    "ipdb>=0.13.9,<0.14",
+    "ipywidgets>=8.1.1,<9",
+    "jupyterlab>=4,<5",
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.5,<10",
+    "nplusone>=1.0.0,<2",
+    "pre-commit>=3.5.0,<4",
+    "traitlets>=5.13.0,<6",
+    "watchdog>=2.2.0,<3",
+    "werkzeug~=3.0",
+    "pudb>=2025.1",
+    "jupyterlab-vim>=4.1.4",
+    "pyinstrument>=4.6.2,<5",
+]
+
+types = [
+    "mypy>=1.17,<2",
+    "celery-types>=0.17.0,<1",
+    "types-requests>=2.28.11.15,<3",
+]
+
+code-checks = [
+    "bandit[sarif]>=1.8.6",
+    "djlint>=1.19.13,<2",
+    "flake8>=6.0.0,<7",
+    "ruff>=0.12.3",
+]
+
+test = [
+    "coverage>=7.4.0,<8",
+    "django-coverage-plugin>=3.0.0,<4",
+    "faker>=5.4.0,<12.1",
+    "mixer>=7.2.2,<8",
+    "pytest-cov>=4.0.0,<5",
+    "pytest-describe>=2.1.0,<3",
+    "pytest-django>=4.5.2,<5",
+    "pytest-env>=1.1.5,<2",
+    "pytest-mock>=3.10.0,<4",
+    "pytest-randomly>=3.16.0,<4",
+    "pytest-sugar>=0.9.6,<0.10",
+    "pytest-xdist>=3.1.0,<4",
+    "pytest>=8.3.4,<9",
+]
+
+
+[tool.basedpyright]
+include = ["src", "llm_toolkit"]
+venvPath = "./.venv"
+pythonVersion = "3.14"
+pythonPlatform = "Linux"
+typeCheckingMode = "off"
+
+reportMissingTypeStubs = false
+reportIncompatibleVariableOverride = false
+reportUnusedParameter = false
+reportExplicitAny = false
+reportUnannotatedClassAttribute = false
+reportAny = false
+reportUnusedCallResult = false
+
+[tool.djlint]
+custom_html = "mjml,mj-head,mj-\\w+"
+
+[tool.mypy]
+
+# https://mypy.readthedocs.io/en/stable/config_file.html
+
+python_version = "3.14"
+mypy_path = "."
+
+
+plugins = ["mypy_django_plugin.main"]
+
+exclude = '''(?x)(
+    ^manage\.py$ |
+    .*/models_factory\.py$
+)'''
+
+follow_imports = "silent"
+disable_error_code = ['import-untyped']
+
+allow_redefinition = false
+check_untyped_defs = true
+disallow_any_explicit = false
+disallow_any_generics = true
+disallow_any_unimported = false
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+error_summary = true
+explicit_package_bases = true
+ignore_errors = false
+ignore_missing_imports = false
+implicit_reexport = false
+local_partial_types = true
+no_implicit_optional = true
+pretty = true
+show_error_codes = true
+show_error_context = true
+strict = true
+strict_equality = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[tool.mypy_django_plugin]
+ignore_missing_model_attributes = true
+
+[tool.django-stubs]
+module = "django-stubs"
+django_settings_module = "app.settings.base"
+
+[[tool.mypy.overrides]]
+module = "*.migrations.*"
+# Django migrations should not produce any errors:
+ignore_errors = true
+
+
+[tool.bandit]
+exclude_dirs = ['**/*_test.py', '**/test_*.py', '.venv', 'venv']
+
+[tool.ruff]
+
+exclude = [
+    "*.egg",
+    "*/migrations/*.py",
+    ".bzr",
+    ".cache",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".local",
+    ".mypy_cache",
+    ".nox",
+    ".npm",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pycache__",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "manage.py",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+
+line-length = 79
+indent-width = 4
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# select = ["E4", "E7", "E9", "F"]
+# ignore = []
+
+extend-select = [
+    "A", # flake8-builtins
+    # flake8-annotations - https://docs.astral.sh/ruff/rules/#flake8-annotations-ann
+    "ANN001",
+    "ANN002",
+    "ANN003",
+    "ANN201",
+    "ANN202",
+    "ANN204",
+    "ANN205",
+    "ANN206",
+    "ARG",    # flake8-unused-arguments (ARG)
+    "ASYNC",  # flake8-async (ASYNC)
+    "B",      # flake8-bugbear
+    "BLE",    # flake8-blind-except
+    "C4",     # flake8-comprehensions (C4)
+    "C90",    # mccabe (C90)
+    "DJ",     # flake8-django
+    "DTZ",    # flake8-datetimez (DTZ)
+    "E",      # pycodestyle Error
+    "ERA",    # eradicate (ERA)
+    "F",      # Pyflakes
+    "FBT",    # flake8-boolean-trap (FBT)
+    "FIX",    # flake8-fixme (FIX)
+    "FURB",   # refurb (FURB)
+    "G",      # flake8-logging-format
+    "I",      # isort
+    "ICN",    # flake8-import-conventions
+    "LOG",    # flake8-logging (LOG)
+    "N",      # pep8-naming
+    "PERF",   # Perflint (PERF)
+    "PIE",    # flake8-pie
+    "PTH",    # flake8-use-pathlib (PTH)
+    "PYI",    # flake8-pyi
+    "Q",      # flake8-quotes
+    "RET",    # flake8-return (RET)
+    "RSE",    # flake8-raise (RSE)
+    "RUF",    # Ruff-specific rules (RUF)
+    "SIM",    # flake8-simplify
+    "SLF",    # flake8-self (SLF)
+    "T10",    # flake8-debugger (T10)
+    "T20",    # flake8-print
+    # "TD",    # flake8-todos (TD)
+    "TID", # flake8-tidy-imports (TID)
+    "TRY", # tryceratops (TRY)
+    "W",   # pycodestyle Warning
+    # "D",     # pydocstyle (D)
+    "FLY",  # flynt (FLY)
+    "SLOT", #flake8-slots
+]
+ignore = [
+    "D100", # undocumented-public-module
+    "D104", # undocumented-public-package
+    # "D203",   # one-blank-line-before-class
+    "D212",   # multi-line-summary-first-line
+    "RUF012", # mutable-class-default
+    "TRY003", # raise-vanilla-args
+    'A003',   # builtin-attribute-shadowing
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+known-third-party = []
+
+[tool.ruff.lint.per-file-ignores]
+"**/admin/*" = [
+    "RUF012", # mutable-class-default
+    "D101",   # undocumented-public-class
+]
+"**/__init__.py" = [
+    "F403", # undefined-local-with-import-star
+    "F401", # unused-import
+]
+"**/{tests,docs,tools}/*" = ["E402", "E501"]
+
+"**/management/commands/*" = [
+    'A003', # builtin-attribute-shadowing
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "app.settings.test"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+
+addopts = [
+    '--create-db',
+    # '--reuse-db',
+    # '--no-migrations',
+    '--tb=native',
+    '--color=yes',
+    '--strict-markers',
+    '--strict-config',
+    # '--durations=0',
+    # '--durations-min=0.5',
+    '--cov=app/',
+    '--cov-report=html',
+    '--cov-config=pyproject.toml',
+    '--cov-report=xml',
+    # '--doctest-modules',
+    '--cov-report=term',
+]
+
+markers = [
+    "unit: mark as Unit Tests",
+    "integration: mark as Integration",
+    "e2e: mark as End to End",
+    "slow: mark test as slow.",
+]
+
+[tool.pytest_env]
+TEST = true
+LOG_DB = false
+DEBUG = false
+
+[tool.coverage.run]
+branch = true
+disable_warnings = ["no-data-collected"]
+omit = [
+    './app/settings/*',
+    './app/conftest.py',
+    './app/tests/*',
+    './app/migrations/*',
+    './app/celery.py',
+    './app/celeryconfig.py',
+    './app/schema.py',
+    './app/wsgi.py',
+    './app/asgi.py',
+    'app/**/tests/*',
+]
+
+[tool.coverage.report]
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+    "if TYPE_CHECKING",
+    "if DEBUG",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+
+    # Skip any pass lines such as may be used for @abstractmethod
+    "pass",
+
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+]

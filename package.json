@@ -1,0 +1,29 @@
+{
+    "name": "uhn_services",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev": "NODE_ENV=development vite dev",
+        "build": "tsc && NODE_ENV=production vite build"
+    },
+    "dependencies": {
+        "@iamwaseem99/vite-plugin-django-frontend-kit": "^1.1.2",
+        "@tailwindcss/forms": "^0.5.11",
+        "@tailwindcss/typography": "^0.5.19",
+        "@tailwindcss/vite": "^4.1.18",
+        "alpinejs": "^3.15.8",
+        "autoprefixer": "^10.4.23",
+        "glob": "^13.0.0",
+        "lucide": "^0.563.0",
+        "tailwindcss": "^4.1.18",
+        "vanilla-sonner": "^0.5.2",
+        "vite": "^7.3.1"
+    },
+    "devDependencies": {
+        "@types/alpinejs": "^3.13.11",
+        "prettier": "^3.8.1",
+        "prettier-plugin-organize-imports": "^4.3.0",
+        "prettier-plugin-tailwindcss": "^0.6.11"
+    }
+}

@@ -1,0 +1,19 @@
+/* SITE INFORMATION */
+/* TODO: FILL  */
+Site name:
+Site URL:   ...
+LinkedIn:   ...
+Twitter:    ...
+Instagram:  ...
+Facebook:   ...
+Location:   ...
+Built with: HTML, CSS, Tailwind CSS, Javascript, Python, Django, Alpine.js, HTMX, MJML, Docker, Vite
+Launched:   2024
+
+
+/* BUILT BY */
+
+Company:    Waseem
+Site:       waseem.works
+Twitter:    https://twitter.com/iamwaseem99
+Location:   Chennai, India.

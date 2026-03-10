@@ -1,0 +1,18 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "python.analysis.packageIndexDepths": [
+        {
+            "name": "django",
+            "depth": 5,
+            "includeAllSymbols": true
+        },
+        {
+            "name": "rest_framework",
+            "depth": 5,
+            "includeAllSymbols": true
+        }
+    ],
+    "cSpell.words": []
+}
