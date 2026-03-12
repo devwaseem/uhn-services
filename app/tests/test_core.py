@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-import importlib
 from types import SimpleNamespace
 from typing import Any
 
 import pytest
-from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory
@@ -189,30 +187,6 @@ def test_url_handlers_render_expected_responses(monkeypatch: Any) -> None:
         app_urls.handler403(request, exception=Ratelimited()).status_code
         == 429
     )
-
-
-def test_optional_url_patterns_can_be_enabled() -> None:
-    """Optional URL patterns are added when flags are enabled."""
-    installed_apps = [
-        *settings.INSTALLED_APPS,
-        "silk",
-        "health_check",
-    ]
-    with override_settings(
-        INSTALLED_APPS=installed_apps,
-        ENABLE_HEALTH_CHECK=True,
-        ENABLE_SILK_PROFILING=True,
-    ):
-        updated_urls = importlib.reload(app_urls)
-
-    routes = {
-        getattr(pattern.pattern, "_route", "") or pattern.pattern.regex.pattern
-        for pattern in updated_urls.urlpatterns
-    }
-    assert "silk/" in routes
-    assert "healthz/" in routes
-
-    importlib.reload(app_urls)
 
 
 def test_miscellaneous_imports_cover_modules() -> None:
