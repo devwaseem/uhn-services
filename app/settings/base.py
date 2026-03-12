@@ -162,7 +162,7 @@ INSTALLED_APPS = [
     *DEFAULT_DJANGO_APPS,
     *THIRD_PARTY_APPS,
     *PROJECT_APPS,
-    *ALL_AUTH_APPS,
+    # *ALL_AUTH_APPS,
 ]
 
 MIDDLEWARE: list[str] = [
@@ -181,7 +181,7 @@ MIDDLEWARE: list[str] = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Django HTMX
@@ -221,7 +221,7 @@ TEMPLATES = [
                 "django.template.context_processors.csp",
                 # Custom
                 "app.context_processors.get_site_data",
-                "app.context_processors.allauth_settings",
+                # "app.context_processors.allauth_settings",
             ],
         },
     },
@@ -273,7 +273,7 @@ AUTH_USER_MODEL = "app.User"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 SITE_ID = Env.int("SITE_ID", default=1)

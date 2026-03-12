@@ -2,6 +2,10 @@ import httpx
 from django.http import HttpRequest, JsonResponse
 from ninja import Router
 
+from app.api_auth.permissions import (
+    AllowedSolutions,
+    SolutionAuth,
+)
 from app.ariba import contract_workspace
 from app.ariba.auth import AribaOAuthManager
 from env import Env
@@ -16,7 +20,10 @@ _API_KEY: str = Env.str("OPERATIONAL_REPORTING_FOR_SOURCING_API_KEY")  # type: i
 _REALM: str = Env.str("OPERATIONAL_REPORTING_FOR_SOURCING_API_REALM")  # type: ignore
 
 
-@router.get("/")
+@router.get(
+    "/",
+    auth=SolutionAuth(solution_name=AllowedSolutions.CONTRACT_WORKSPACES),
+)
 async def contract_workspaces(
     request: HttpRequest,  # noqa
     page_token: str | None = None,

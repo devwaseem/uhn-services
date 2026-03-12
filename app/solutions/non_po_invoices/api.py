@@ -5,6 +5,10 @@ import httpx
 from django.http import HttpRequest, JsonResponse
 from ninja import Query, Router
 
+from app.api_auth.permissions import (
+    AllowedSolutions,
+    SolutionAuth,
+)
 from app.ariba import operational_procurement
 from app.ariba.auth import AribaOAuthManager
 from env import Env
@@ -22,7 +26,10 @@ _REALM: str = Env.str("OPERATIONAL_PROCUREMENT_API_REALM")  # type: ignore
 _EXAMPLE_DATE = datetime.now(tz=timezone.utc).date()
 
 
-@router.get("/")
+@router.get(
+    path="/non-po-invoices/",
+    auth=SolutionAuth(solution_name=AllowedSolutions.NON_PO_INVOICES),
+)
 async def non_po_invoices(
     request: HttpRequest,  # noqa
     date_from: date = Query(example=_EXAMPLE_DATE),  # noqa  # type: ignore
