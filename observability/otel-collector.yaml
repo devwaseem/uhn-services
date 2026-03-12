@@ -1,43 +1,43 @@
 receivers:
-  otlp:
-    protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
+    otlp:
+        protocols:
+            grpc:
+                endpoint: 0.0.0.0:4317
+            http:
+                endpoint: 0.0.0.0:4318
 
 processors:
-  memory_limiter:
-    check_interval: 1s
-    limit_mib: 512
-    spike_limit_mib: 128
-  batch:
-    timeout: 5s
-    send_batch_size: 1024
-  attributes/redact:
-    actions:
-      - key: http.request.header.authorization
-        action: delete
+    memory_limiter:
+        check_interval: 1s
+        limit_mib: 512
+        spike_limit_mib: 128
+    batch:
+        timeout: 5s
+        send_batch_size: 1024
+    attributes/redact:
+        actions:
+            - key: http.request.header.authorization
+              action: delete
 
 exporters:
-  debug:
-    verbosity: normal
-  otlphttp:
-    endpoint: ${OTEL_BACKEND_ENDPOINT}
-    headers:
-      Authorization: ${OTEL_BACKEND_AUTH_HEADER}
+    debug:
+        verbosity: normal
+    otlphttp:
+        endpoint: ${OTEL_BACKEND_ENDPOINT}
+        headers:
+            Authorization: ${OTEL_BACKEND_AUTH_HEADER}
 
 service:
-  pipelines:
-    traces:
-      receivers: [otlp]
-      processors: [memory_limiter, attributes/redact, batch]
-      exporters: [debug, otlphttp]
-    metrics:
-      receivers: [otlp]
-      processors: [memory_limiter, attributes/redact, batch]
-      exporters: [debug, otlphttp]
-    logs:
-      receivers: [otlp]
-      processors: [memory_limiter, attributes/redact, batch]
-      exporters: [debug, otlphttp]
+    pipelines:
+        traces:
+            receivers: [otlp]
+            processors: [memory_limiter, attributes/redact, batch]
+            exporters: [debug, otlphttp]
+        metrics:
+            receivers: [otlp]
+            processors: [memory_limiter, attributes/redact, batch]
+            exporters: [debug, otlphttp]
+        logs:
+            receivers: [otlp]
+            processors: [memory_limiter, attributes/redact, batch]
+            exporters: [debug, otlphttp]

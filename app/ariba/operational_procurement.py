@@ -10,7 +10,8 @@ _BASE_URL = (
 )
 
 
-class OperationalProcurementAuthenticationError(Exception): ...
+class OperationalProcurementAuthenticationError(Exception):
+    ...
 
 
 async def get_view(

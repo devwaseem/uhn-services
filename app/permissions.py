@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import AccessMixin
 from django.http import HttpResponse
+
 from .request import HTTPAuthRequest
+
 
 class SuperUserLoginRequiredMixin(AccessMixin):
     def dispatch(

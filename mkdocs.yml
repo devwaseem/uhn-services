@@ -1,17 +1,17 @@
-site_name: "UHN Services"
-site_description: "Project documentation"
-site_url: ""
+site_name: 'UHN Services'
+site_description: 'Project documentation'
+site_url: ''
 
 theme:
-  name: material
-  features:
-    - navigation.instant
-    - navigation.sections
-    - content.code.copy
+    name: material
+    features:
+        - navigation.instant
+        - navigation.sections
+        - content.code.copy
 
 nav:
-  - Home: index.md
-  - Quickstart: quickstart.md
-  - Settings: settings.md
-  - Deployment: deployment.md
-  - Observability: observability.md
+    - Home: index.md
+    - Quickstart: quickstart.md
+    - Settings: settings.md
+    - Deployment: deployment.md
+    - Observability: observability.md

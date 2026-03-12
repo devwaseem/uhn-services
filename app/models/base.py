@@ -23,6 +23,7 @@ class UUIDModel(models.Model):
     class Meta:
         abstract = True
 
+
 class TimestampedUUIDModel(TimeStampedModel, UUIDModel):
     class Meta:
         abstract = True

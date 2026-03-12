@@ -5,7 +5,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpRequest
 
 
-
 class DomainContext(TypedDict):
     domain_name: str
     site_name: str | None

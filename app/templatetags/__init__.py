@@ -1,1 +1,1 @@
-from .replace import replace  # noqa
+from .replace import replace

@@ -126,9 +126,9 @@ def test_csp_excluder_strips_csp_headers_for_configured_paths() -> None:
     def get_response(_request: HttpRequest) -> HttpResponse:
         response = HttpResponse("ok")
         response.headers["Content-Security-Policy"] = "default-src 'self'"
-        response.headers["Content-Security-Policy-Report-Only"] = (
-            "default-src 'none'"
-        )
+        response.headers[
+            "Content-Security-Policy-Report-Only"
+        ] = "default-src 'none'"
         return response
 
     middleware = csp_excluder(get_response)

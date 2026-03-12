@@ -39,7 +39,8 @@ def setup_celery_logging(**_kwargs: Any) -> None:
 
 
 @app.on_after_configure.connect
-def setup_periodic_tasks(_sender: Any, **_kwargs: Any) -> None: ...
+def setup_periodic_tasks(_sender: Any, **_kwargs: Any) -> None:
+    ...
 
 
 @worker_process_init.connect(weak=False)

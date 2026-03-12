@@ -1,33 +1,41 @@
 # Settings
 
 ## Modules
+
 - Development: `app.settings.dev`
 - Production: `app.settings.prod`
 - Test: `app.settings.test`
 
 ## Required Production Values
+
 Set these before deployment:
+
 - `SECRET_KEY`
 - `ALLOWED_HOSTS`
 - `USE_SSL=true`
 
 ## Runtime Protections
+
 Production defaults are controlled via:
+
 - `SECURE_REFERRER_POLICY`
 - `SECURE_CROSS_ORIGIN_OPENER_POLICY`
 - `SECURE_CROSS_ORIGIN_EMBEDDER_POLICY`
 - `SECURE_CROSS_ORIGIN_RESOURCE_POLICY`
 
 ## Static and Media
+
 - `DJANGO_STATIC_HOST` and `DJANGO_MEDIA_HOST` control URL prefixes.
 - `STATIC_LOCATION` controls where collected static files are stored.
-  - Recommended default for local/dev: `static`
-  - Typical production path: `/var/www/static`
+    - Recommended default for local/dev: `static`
+    - Typical production path: `/var/www/static`
 - `STATIC_USE_WHITENOISE=true` enables local serving via Whitenoise.
 - `STATIC_USE_S3=true` and/or `MEDIA_USE_S3=true` switches to S3-backed storage.
 
 ## OpenTelemetry
+
 Key OTEL settings:
+
 - `ENABLE_OTEL`
 - `OTEL_SDK_DISABLED`
 - `OTEL_SERVICE_NAME`
@@ -41,6 +49,7 @@ Key OTEL settings:
 - `OTEL_PYTHON_DJANGO_EXCLUDED_URLS`
 
 ## CSP
+
 The project uses Django’s built-in CSP with nonces in production and a relaxed
 policy in development for Vite.
 

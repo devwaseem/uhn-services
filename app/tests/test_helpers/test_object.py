@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from app.helpers.object import has_any_field_valid, object_or_none, value_or_none
+from app.helpers.object import (
+    has_any_field_valid,
+    object_or_none,
+    value_or_none,
+)
 
 
 @dataclass

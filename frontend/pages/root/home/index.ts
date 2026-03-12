@@ -1,4 +1,4 @@
-import "@shared/main";
-import "./index.css";
+import '@shared/main';
+import './index.css';
 
-alert("Django frontend works");
+alert('Django frontend works');

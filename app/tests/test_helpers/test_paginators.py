@@ -7,7 +7,9 @@ from app.helpers.paginators import Page, SimplePaginator
 
 def test_simple_paginator_properties() -> None:
     """SimplePaginator exposes navigation properties."""
-    paginator = SimplePaginator(num_items=120, items_per_page=10, current_page=3)
+    paginator = SimplePaginator(
+        num_items=120, items_per_page=10, current_page=3
+    )
 
     assert paginator.items_from_in_current_page == 21
     assert paginator.items_to_in_current_page == 30
@@ -20,7 +22,9 @@ def test_simple_paginator_properties() -> None:
 
 def test_simple_paginator_pages_include_gaps() -> None:
     """SimplePaginator inserts gap markers when needed."""
-    paginator = SimplePaginator(num_items=200, items_per_page=10, current_page=5)
+    paginator = SimplePaginator(
+        num_items=200, items_per_page=10, current_page=5
+    )
 
     pages = paginator.pages
 

@@ -4,8 +4,8 @@
 
 @theme {
     --font-sans:
-        'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
 
     --color-base-100: oklch(1 0 0);
     --color-base-200: oklch(0.97 0 0);
