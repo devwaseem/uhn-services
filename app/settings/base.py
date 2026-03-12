@@ -29,8 +29,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = Env.bool("DEBUG")
 TEST = "test" in sys.argv or sys.argv[0].endswith("pytest") or Env.bool("TEST")
 
-DOMAIN_NAME = Env.str("DOMAIN_NAME")
-BASE_URL = Env("DOMAIN_NAME")
 SECRET_KEY = Env("SECRET_KEY")
 
 NO_CACHE = Env.bool("NO_CACHE")
@@ -85,10 +83,6 @@ CSRF_COOKIE_SECURE = USE_SSL
 CSRF_COOKIE_SAMESITE = "Lax"
 
 SECURE_SSL_REDIRECT = USE_SSL
-
-# https://github.com/DmytroLitvinov/django-http-referrer-policy
-# https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # https://github.com/adamchainz/django-permissions-policy#setting
 PERMISSIONS_POLICY: dict[str, str | list[str]] = {}
@@ -386,6 +380,7 @@ STATIC_LOCATION = Env.str(
     "STATIC_LOCATION",
     "static" if DEBUG else "/var/www/static",
 )
+STATIC_ROOT = STATIC_LOCATION
 
 MEDIA_URL = f"{DJANGO_MEDIA_HOST}/media/"
 STATIC_URL = f"{DJANGO_STATIC_HOST}/static/"
@@ -455,7 +450,7 @@ STATICFILES_FINDERS = [
 ]
 
 # CSP (Django built-in)
-CSP_EXCLUDE_PATH_PREFIXES = ["/admin"]
+CSP_EXCLUDE_PATH_PREFIXES = ["/admin", "/api/docs"]
 
 SECURE_CSP: dict[str, list[str]] = {
     "default-src": [CSP.SELF],
@@ -494,11 +489,11 @@ if MEDIA_URL.startswith("http"):
 EMAIL_TIMEOUT = 5
 SERVER_EMAIL = Env.str(
     "SERVER_EMAIL",
-    default=f"<system@{DOMAIN_NAME}>",
+    default="<system@uhn_services>",
 )
 DEFAULT_FROM_EMAIL = Env.str(
     "DEFAULT_FROM_EMAIL",
-    f"<no-reply@{DOMAIN_NAME}>",
+    "<no-reply@uhn_services>",
 )
 
 EMAIL_BACKEND = Env.str(
