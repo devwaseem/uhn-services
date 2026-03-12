@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import socket
 from collections.abc import MutableMapping
-from typing import Any
+from typing import Any, cast
 
 from django.conf import settings
 from opentelemetry import metrics, trace
@@ -25,8 +25,8 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.trace import Span
 
-_INITIALIZED = False
-_INITIALIZED_PID = -1
+_initialized = False
+_initialized_pid = -1
 
 
 def otel_enabled() -> bool:
@@ -38,11 +38,11 @@ def otel_enabled() -> bool:
 
 
 def initialize_telemetry(service_name: str | None = None) -> None:
-    global _INITIALIZED
-    global _INITIALIZED_PID
+    global _initialized
+    global _initialized_pid
 
     current_pid = os.getpid()
-    if _INITIALIZED and current_pid == _INITIALIZED_PID:
+    if _initialized and current_pid == _initialized_pid:
         return
 
     if not otel_enabled():
@@ -84,11 +84,11 @@ def initialize_telemetry(service_name: str | None = None) -> None:
     LoggingInstrumentor().instrument(set_logging_format=False)
     DjangoInstrumentor().instrument()
     CeleryInstrumentor().instrument()
-    RedisInstrumentor().instrument()
+    cast(Any, RedisInstrumentor()).instrument()
     PsycopgInstrumentor().instrument()
 
-    _INITIALIZED = True
-    _INITIALIZED_PID = current_pid
+    _initialized = True
+    _initialized_pid = current_pid
 
 
 def current_trace_ids() -> dict[str, str]:

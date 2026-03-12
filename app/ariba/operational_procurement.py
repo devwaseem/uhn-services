@@ -10,8 +10,7 @@ _BASE_URL = (
 )
 
 
-class OperationalProcurementAuthenticationError(Exception):
-    ...
+class OperationalProcurementAuthenticationError(Exception): ...
 
 
 async def get_view(
@@ -41,7 +40,7 @@ async def get_view(
         },
     )
     if response.status_code == 401:
-        raise OperationalProcurementAuthenticationError(response=response)
+        raise OperationalProcurementAuthenticationError(response)
 
     response.raise_for_status()
     return response.json()

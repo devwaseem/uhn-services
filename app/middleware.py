@@ -1,7 +1,7 @@
 from collections.abc import Awaitable, Callable
+from inspect import iscoroutinefunction
 from typing import cast, overload
 
-from asgiref.sync import iscoroutinefunction
 from django.conf import settings
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
@@ -22,15 +22,13 @@ def disable_client_side_caching_middleware(
 @overload
 def csp_excluder(
     get_response: Callable[[HttpRequest], HttpResponse],
-) -> Callable[[HttpRequest], HttpResponse]:
-    ...
+) -> Callable[[HttpRequest], HttpResponse]: ...
 
 
 @overload
 def csp_excluder(
     get_response: Callable[[HttpRequest], Awaitable[HttpResponse]],
-) -> Callable[[HttpRequest], Awaitable[HttpResponse]]:
-    ...
+) -> Callable[[HttpRequest], Awaitable[HttpResponse]]: ...
 
 
 def csp_excluder(

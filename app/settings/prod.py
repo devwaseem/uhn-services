@@ -1,23 +1,40 @@
 from __future__ import annotations
 
+from copy import deepcopy
+from typing import Any, cast
+
 from django.core.exceptions import ImproperlyConfigured
 
 from env import Env
 
-from .base import *  # noqa: F403
+from . import base as base_settings
+
+
+def _copy_base_settings() -> dict[str, Any]:
+    return {
+        name: value
+        for name, value in vars(base_settings).items()
+        if name.isupper()
+    }
+
+
+globals().update(_copy_base_settings())
 
 DEBUG = False
+ALLOWED_HOSTS = list(base_settings.ALLOWED_HOSTS)
+SECRET_KEY = base_settings.SECRET_KEY
+USE_SSL = base_settings.USE_SSL
 
-if not ALLOWED_HOSTS:  # noqa: F405
+if not ALLOWED_HOSTS:
     raise ImproperlyConfigured("ALLOWED_HOSTS must be set in production.")
 
-if not SECRET_KEY or SECRET_KEY == "replace-me":  # noqa: F405
+if not SECRET_KEY or SECRET_KEY == "replace-me":
     raise ImproperlyConfigured("SECRET_KEY must be set to a secure value.")
 
 USE_X_FORWARDED_HOST = Env.bool("USE_X_FORWARDED_HOST")
 SECURE_PROXY_SSL_HEADER = (
     "HTTP_X_FORWARDED_PROTO",
-    "https" if USE_SSL else "http",  # noqa: F405
+    "https" if USE_SSL else "http",
 )
 
 SECURE_HSTS_SECONDS = 63072000  # 2 years
@@ -41,10 +58,15 @@ SECURE_CROSS_ORIGIN_RESOURCE_POLICY = Env.str(
     default="same-site",
 )
 
-LOGGING["handlers"]["json_console"]["formatter"] = "json"  # noqa: F405
+LOGGING = deepcopy(base_settings.LOGGING)
+LOGGING["handlers"]["json_console"]["formatter"] = "json"
 
-for logger_name, logger_config in LOGGING["loggers"].items():  # noqa: F405
-    if "plain_console" in logger_config.get("handlers", []):
+for logger_name, logger_config in cast(
+    dict[str, dict[str, Any]],
+    LOGGING["loggers"],
+).items():
+    handlers = cast(list[str], logger_config.get("handlers", []))
+    if "plain_console" in handlers:
         raise ImproperlyConfigured(
             f"Logger {logger_name} cannot use plain_console in production."
         )

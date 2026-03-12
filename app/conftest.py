@@ -6,7 +6,7 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-def _set_tmp_media_storage(settings: Any) -> Generator[None, Any, None]:
+def set_tmp_media_storage(settings: Any) -> Generator[None, Any, None]:
     with TemporaryDirectory(prefix="test") as tmpdir:
         settings.STORAGES["default"]["OPTIONS"]["location"] = tmpdir
         yield

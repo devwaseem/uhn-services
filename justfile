@@ -24,10 +24,7 @@ docs-build:
   uv run mkdocs build
 
 typecheck *ARGS:
-  uv run mypy app {{ ARGS }}
-
-type *ARGS:
-  uv run mypy app {{ ARGS }}
+  uv run basedpyright {{ ARGS }}
 
 celery:
   LOG_DB=true uv run watchmedo auto-restart --directory=app --recursive --pattern '*.py' -- celery --app app worker -E -l INFO -Q celery --pool gevent --concurrency 20

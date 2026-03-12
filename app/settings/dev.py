@@ -1,20 +1,33 @@
 from __future__ import annotations
 
 import logging
+from typing import Any, cast
 
 import structlog
 
 from app.telemetry import add_trace_context_to_event
 from env import Env
 
-from .base import *  # noqa: F403
+from . import base as base_settings
+
+
+def _copy_base_settings() -> dict[str, Any]:
+    return {
+        name: value
+        for name, value in vars(base_settings).items()
+        if name.isupper()
+    }
+
+
+globals().update(_copy_base_settings())
 
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 INTERNAL_IPS = ["127.0.0.1"]
 
-INSTALLED_APPS += [  # noqa: F405
+INSTALLED_APPS = [
+    *base_settings.INSTALLED_APPS,
     "django_browser_reload",
     "debug_toolbar",
     "nplusone.ext.django",
@@ -23,7 +36,7 @@ INSTALLED_APPS += [  # noqa: F405
 
 MIDDLEWARE = [
     "nplusone.ext.django.NPlusOneMiddleware",
-    *MIDDLEWARE,  # noqa: F405
+    *base_settings.MIDDLEWARE,
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
@@ -35,14 +48,21 @@ NPLUSONE_LOGGER = structlog.getLogger("django")
 NPLUSONE_LOG_LEVEL = logging.WARNING
 NPLUSONE_WHITELIST = [{"model": "admin.LogEntry", "field": "user"}]
 
-# Dev CSP: allow Vite dev server runtime
-vite_ws = f"ws://{VITE_DEV_SERVER_HOST}:{VITE_DEV_SERVER_PORT}"  # noqa: F405
-SECURE_CSP["script-src"].append(VITE_DEV_SERVER_ORIGIN)  # noqa: F405
-SECURE_CSP["style-src"].remove(CSP.NONCE)  # noqa: F405
-SECURE_CSP["style-src"].extend([VITE_DEV_SERVER_ORIGIN, CSP.UNSAFE_INLINE])  # noqa: F405
-SECURE_CSP["connect-src"].extend([VITE_DEV_SERVER_ORIGIN, vite_ws])  # noqa: F405
+SECURE_CSP = {
+    directive: list(values)
+    for directive, values in base_settings.SECURE_CSP.items()
+}
 
-LOGGING = {
+# Dev CSP: allow Vite dev server runtime
+vite_origin = base_settings.VITE_DEV_SERVER_ORIGIN
+vite_ws = f"ws://{base_settings.VITE_DEV_SERVER_HOST}:{base_settings.VITE_DEV_SERVER_PORT}"
+SECURE_CSP["script-src"].append(vite_origin)
+if base_settings.CSP.NONCE in SECURE_CSP["style-src"]:
+    SECURE_CSP["style-src"].remove(base_settings.CSP.NONCE)
+SECURE_CSP["style-src"].extend([vite_origin, base_settings.CSP.UNSAFE_INLINE])
+SECURE_CSP["connect-src"].extend([vite_origin, vite_ws])
+
+LOGGING: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
@@ -141,7 +161,7 @@ LOGGING = {
 }
 
 if Env.bool("LOG_DB"):
-    LOGGING["loggers"]["django.db"] = {  # type: ignore[index]
+    cast(dict[str, Any], LOGGING["loggers"])["django.db"] = {
         "handlers": ["plain_console"],
         "propagate": False,
         "level": "DEBUG",

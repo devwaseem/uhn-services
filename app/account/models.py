@@ -61,12 +61,26 @@ class UserManager(BaseUserManager["User"]):
 class User(AbstractUser):
     """User model for email-based authentication."""
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid7, editable=False)
+    is_staff: bool
+    is_superuser: bool
+
+    id = models.UUIDField[uuid.UUID, uuid.UUID](
+        primary_key=True,
+        default=uuid.uuid7,
+        editable=False,
+    )
     username = None  # type:ignore
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField[str, str](
+        _("email address"),
+        unique=True,
+    )
 
     # First and last name do not cover name patterns around the globe
-    name = models.CharField(_("Name"), blank=True, max_length=255)
+    name = models.CharField[str, str](
+        _("Name"),
+        blank=True,
+        max_length=255,
+    )
     first_name = None  # type: ignore[assignment]
     last_name = None  # type: ignore[assignment]
 

@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import Any, TypedDict, cast
 
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -16,8 +16,9 @@ class DomainContext(TypedDict):
 
 def get_site_data(request: HttpRequest) -> DomainContext:
     site = get_current_site(request)
-    site_name = site.name
-    domain_name = site.domain
+    site_name_value = cast(str | None, getattr(site, "name", None))
+    site_name = str(site_name_value) if site_name_value else None
+    domain_name = str(cast(Any, getattr(site, "domain", "")))
     protocol = "https" if request.is_secure() else "http"
     base_url = f"{protocol}://{domain_name}"
 
@@ -26,8 +27,8 @@ def get_site_data(request: HttpRequest) -> DomainContext:
         site_name=site_name,
         protocol=protocol,
         base_url=base_url,
-        static_url=settings.STATIC_URL,
-        media_url=settings.MEDIA_URL,
+        static_url=str(settings.STATIC_URL),
+        media_url=str(settings.MEDIA_URL),
     )
 
 

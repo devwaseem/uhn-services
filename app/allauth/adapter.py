@@ -1,17 +1,26 @@
-from typing import Any
+from collections.abc import Callable
+from typing import Any, Literal, cast
 
 from allauth.account.adapter import DefaultAccountAdapter
 from django.conf import settings
+from django.core.mail import EmailMessage
 from django.http import HttpRequest
 
 from app.context_processors import get_site_data
 
 
-class AllAuthAccountAdapter(DefaultAccountAdapter):  # type: ignore
+class AllAuthAccountAdapter(DefaultAccountAdapter):
     request: HttpRequest
 
-    def is_open_for_signup(self, _request: HttpRequest) -> bool:
-        return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
+    def is_open_for_signup(
+        self,
+        request: HttpRequest,
+    ) -> Literal[True]:
+        del request
+        allow_registration = bool(
+            getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
+        )
+        return cast(Literal[True], allow_registration)
 
     def send_mail(
         self,
@@ -20,7 +29,11 @@ class AllAuthAccountAdapter(DefaultAccountAdapter):  # type: ignore
         context: dict[str, Any],
     ) -> None:
         context.update(get_site_data(request=self.request))
-        msg = self.render_mail(template_prefix, email, context)
+        typed_render_mail = cast(
+            Callable[[str, str, dict[str, Any]], EmailMessage],
+            self.render_mail,
+        )
+        msg = typed_render_mail(template_prefix, email, context)
         msg.send()
 
     def format_email_subject(self, subject: str) -> str:

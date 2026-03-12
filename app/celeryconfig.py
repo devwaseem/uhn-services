@@ -4,8 +4,8 @@ from env import Env
 
 timezone = settings.TIME_ZONE
 task_track_started = True
-broker_url = Env("CELERY_BROKER_URL")
-result_backend = Env("CELERY_RESULT_BACKEND")
+broker_url = Env.str("CELERY_BROKER_URL")
+result_backend = Env.str("CELERY_RESULT_BACKEND")
 cache_backend = "default"
 delery_accept_content = ["application/json"]
 task_serializer = "json"

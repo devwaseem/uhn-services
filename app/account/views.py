@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 from allauth.account.views import (
     LoginView,
@@ -11,7 +11,6 @@ from allauth.account.views import (
 )
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import resolve_url
 
 from frontend.pages.auth.login import LoginPage
 from frontend.pages.auth.password_reset import PasswordResetPage
@@ -35,10 +34,11 @@ class AccountLoginView(LoginView):  # type: ignore[misc]
         **kwargs: Any,
     ) -> HttpResponse:
         if request.user.is_authenticated:
-            redirect_url = resolve_url(settings.LOGIN_REDIRECT_URL)
+            redirect_url = str(settings.LOGIN_REDIRECT_URL)
             return HttpResponseRedirect(redirect_url)
 
-        return super().dispatch(request, *args, **kwargs)
+        super_dispatch = cast(Any, super().dispatch)
+        return cast(HttpResponse, super_dispatch(request, *args, **kwargs))
 
     def render_to_response(
         self, context: dict[str, Any], **_response_kwargs: Any

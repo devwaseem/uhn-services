@@ -1,19 +1,23 @@
 import uuid
+from datetime import datetime
 
 from django.db import models
 
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    created_at: models.DateTimeField[datetime, datetime](auto_now_add=True)
+    modified_at = models.DateTimeField[datetime, datetime](auto_now=True)
 
     class Meta:
         abstract = True
 
 
 class UUIDModel(models.Model):
-    internal_id = models.AutoField(primary_key=True, editable=False)
-    id = models.UUIDField(
+    internal_id = models.AutoField[int, int](
+        primary_key=True,
+        editable=False,
+    )
+    id = models.UUIDField[uuid.UUID, uuid.UUID](
         unique=True,
         default=uuid.uuid4,
         editable=False,
@@ -25,5 +29,5 @@ class UUIDModel(models.Model):
 
 
 class TimestampedUUIDModel(TimeStampedModel, UUIDModel):
-    class Meta:
+    class Meta(TimeStampedModel.Meta, UUIDModel.Meta):
         abstract = True

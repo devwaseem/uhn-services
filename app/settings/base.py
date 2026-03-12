@@ -1,21 +1,47 @@
 from __future__ import annotations
 
+import importlib
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from types import SimpleNamespace
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 import django_stubs_ext
 import structlog
 from django.contrib.messages import constants as messages
 from django.http import HttpRequest
 from django.urls import reverse_lazy
-from django.utils.csp import CSP
 from django.utils.translation import gettext_lazy as _
 from storages.backends.s3boto3 import S3Boto3Storage
 
 from app.helpers.network import get_ip_from_request
 from app.telemetry import add_trace_context_to_event
 from env import Env
+
+
+class _CSPValues(Protocol):
+    SELF: str
+    NONCE: str
+    UNSAFE_INLINE: str
+
+
+_FALLBACK_CSP = SimpleNamespace(
+    SELF="'self'",
+    NONCE="'nonce-{nonce}'",
+    UNSAFE_INLINE="'unsafe-inline'",
+)
+
+
+def _load_csp() -> _CSPValues:
+    try:
+        csp_module = importlib.import_module("django.utils.csp")
+    except ModuleNotFoundError:
+        return cast(_CSPValues, _FALLBACK_CSP)
+
+    return cast(_CSPValues, getattr(csp_module, "CSP", _FALLBACK_CSP))
+
+
+CSP = _load_csp()
 
 if TYPE_CHECKING:
     from celery.app.task import Task
@@ -29,7 +55,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = Env.bool("DEBUG")
 TEST = "test" in sys.argv or sys.argv[0].endswith("pytest") or Env.bool("TEST")
 
-SECRET_KEY = Env("SECRET_KEY")
+SECRET_KEY = Env.str("SECRET_KEY")
 
 NO_CACHE = Env.bool("NO_CACHE")
 
@@ -164,9 +190,7 @@ MIDDLEWARE: list[str] = [
 ]
 
 if STATIC_USE_WHITENOISE:
-    MIDDLEWARE += [
-        "whitenoise.middleware.WhiteNoiseMiddleware",
-    ]
+    MIDDLEWARE.append("whitenoise.middleware.WhiteNoiseMiddleware")
 
 ROOT_URLCONF = "app.urls"
 
@@ -293,15 +317,15 @@ ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
 # Database
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-DATABASES = {
+DATABASES: dict[str, dict[str, Any]] = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": Env("POSTGRES_DB"),
-        "USER": Env("POSTGRES_USER"),
-        "PASSWORD": Env("POSTGRES_PASSWORD"),
-        "HOST": Env("DJANGO_DATABASE_HOST"),
-        "PORT": Env("DJANGO_DATABASE_PORT"),
-        "CONN_MAX_AGE": Env("CONN_MAX_AGE"),
+        "NAME": Env.str("POSTGRES_DB"),
+        "USER": Env.str("POSTGRES_USER"),
+        "PASSWORD": Env.str("POSTGRES_PASSWORD"),
+        "HOST": Env.str("DJANGO_DATABASE_HOST"),
+        "PORT": Env.int("DJANGO_DATABASE_PORT"),
+        "CONN_MAX_AGE": Env.int("CONN_MAX_AGE"),
         "OPTIONS": {
             "connect_timeout": 10,
             "options": "-c statement_timeout=15000ms",
@@ -375,41 +399,32 @@ class DBBackupStorage(S3Boto3Storage):  # type: ignore
 DJANGO_STATIC_HOST = Env.str("DJANGO_STATIC_HOST")
 DJANGO_MEDIA_HOST = Env.str("DJANGO_MEDIA_HOST")
 
-MEDIA_LOCATION = "media"
-STATIC_LOCATION = Env.str(
+_media_location = "media"
+_static_location = Env.str(
     "STATIC_LOCATION",
     "static" if DEBUG else "/var/www/static",
 )
-STATIC_ROOT = STATIC_LOCATION
+_media_url = f"{DJANGO_MEDIA_HOST}/media/"
+_static_url = f"{DJANGO_STATIC_HOST}/static/"
 
-MEDIA_URL = f"{DJANGO_MEDIA_HOST}/media/"
-STATIC_URL = f"{DJANGO_STATIC_HOST}/static/"
+_default_storage_backend = "django.core.files.storage.FileSystemStorage"
+_default_storage_options: dict[str, str] = {
+    "location": _media_location,
+    "base_url": _media_url,
+}
 
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        "OPTIONS": {
-            "location": MEDIA_LOCATION,
-            "base_url": MEDIA_URL,
-        },
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",  # noqa
-        "OPTIONS": {
-            "location": STATIC_LOCATION,
-            "base_url": STATIC_URL,
-        },
-    },
+_staticfiles_storage_backend = (
+    "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
+)
+_staticfiles_storage_options: dict[str, str] = {
+    "location": _static_location,
+    "base_url": _static_url,
 }
 
 if STATIC_USE_WHITENOISE:
-    STORAGES["staticfiles"] = {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-        "OPTIONS": {
-            "location": STATIC_LOCATION,
-            "base_url": STATIC_URL,
-        },
-    }
+    _staticfiles_storage_backend = (
+        "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    )
 
     def immutable_file_test(_: object, url: str) -> Any:
         # Match filename with 12 hex digits before the extension
@@ -421,26 +436,38 @@ if STATIC_USE_WHITENOISE:
     WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
 
 if MEDIA_USE_S3:
-    MEDIA_LOCATION = "media"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-    STORAGES["default"] = {
-        "BACKEND": "app.settings.base.PublicMediaStorage",
-        "OPTIONS": {
-            "location": MEDIA_LOCATION,
-        },
+    _media_url = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    _default_storage_backend = "app.settings.base.PublicMediaStorage"
+    _default_storage_options = {
+        "location": _media_location,
     }
 
 if STATIC_USE_S3:
-    STATIC_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    STORAGES["staticfiles"] = {
-        "BACKEND": "app.settings.base.StaticStorage",
-        "OPTIONS": {
-            "location": STATIC_LOCATION,
-        },
+    _static_location = "static"
+    _static_url = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    _staticfiles_storage_backend = "app.settings.base.StaticStorage"
+    _staticfiles_storage_options = {
+        "location": _static_location,
     }
 
-STATIC_ROOT = STORAGES["staticfiles"]["OPTIONS"]["location"]  # type: ignore
+MEDIA_LOCATION = _media_location
+STATIC_LOCATION = _static_location
+MEDIA_URL = _media_url
+STATIC_URL = _static_url
+
+STORAGES: dict[str, dict[str, Any]] = {
+    "default": {
+        "BACKEND": _default_storage_backend,
+        "OPTIONS": _default_storage_options,
+    },
+    "staticfiles": {
+        "BACKEND": _staticfiles_storage_backend,
+        "OPTIONS": _staticfiles_storage_options,
+    },
+}
+
+
+STATIC_ROOT = cast(str, STORAGES["staticfiles"]["OPTIONS"]["location"])
 
 STATICFILES_DIRS = [VITE_OUTPUT_DIR]
 
@@ -506,10 +533,9 @@ EMAIL_HOST_PASSWORD = Env.str("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = Env.int("EMAIL_PORT")
 EMAIL_USE_TLS = Env.bool("EMAIL_USE_TLS")
 
-ANYMAIL = {"AMAZON_SES_CLIENT_PARAMS": {"region_name": AWS_S3_REGION_NAME}}
 
 # Logging
-LOGGING = {
+LOGGING: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
     "filters": {
@@ -614,7 +640,7 @@ LOGGING = {
 }
 
 if Env.bool("LOG_DB"):
-    LOGGING["loggers"]["django.db"] = {  # type: ignore
+    cast(dict[str, Any], LOGGING["loggers"])["django.db"] = {
         "handlers": ["json_console"],
         "propagate": False,
         "level": "DEBUG",
@@ -622,14 +648,6 @@ if Env.bool("LOG_DB"):
 
 # Constance
 CONSTANCE_CONFIG: dict[str, Any] = {}
-
-# DBBackup
-DBBACKUP_STORAGE = "app.settings.base.DBBackupStorage"
-DBBACKUP_CLEANUP_KEEP = 7
-
-if DEBUG:
-    DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
-    DBBACKUP_STORAGE_OPTIONS = {"location": "./data"}
 
 # Rate limiting
 RATELIMIT_HASH_ALGORITHM = "hashlib.md5"
@@ -641,18 +659,20 @@ def RATELIMIT_IP_META_KEY(request: HttpRequest) -> str | None:  # noqa
 
 # Optional integrations
 if ENABLE_HEALTH_CHECK:
-    INSTALLED_APPS += [
-        "health_check",
-        "health_check.db",
-        "health_check.cache",
-        "health_check.storage",
-        "health_check.contrib.migrations",
-        "health_check.contrib.celery",
-        "health_check.contrib.celery_ping",
-        "health_check.contrib.psutil",
-        "health_check.contrib.s3boto3_storage",
-        "health_check.contrib.redis",
-    ]
+    INSTALLED_APPS.extend(
+        [
+            "health_check",
+            "health_check.db",
+            "health_check.cache",
+            "health_check.storage",
+            "health_check.contrib.migrations",
+            "health_check.contrib.celery",
+            "health_check.contrib.celery_ping",
+            "health_check.contrib.psutil",
+            "health_check.contrib.s3boto3_storage",
+            "health_check.contrib.redis",
+        ]
+    )
 
     HEALTH_CHECK = {
         "DISK_USAGE_MAX": 90,
@@ -666,16 +686,18 @@ if ENABLE_HEALTH_CHECK:
     }
 
 if ENABLE_SILK_PROFILING:
-    INSTALLED_APPS += ["silk"]
-    MIDDLEWARE += ["silk.middleware.SilkyMiddleware"]
+    INSTALLED_APPS.append("silk")
+    MIDDLEWARE.append("silk.middleware.SilkyMiddleware")
     SILKY_PYTHON_PROFILER = True
 
 if ENABLE_CPROFILE:
-    MIDDLEWARE += ["django_cprofile_middleware.middleware.ProfilerMiddleware"]
+    MIDDLEWARE.append(
+        "django_cprofile_middleware.middleware.ProfilerMiddleware"
+    )
     DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = True
 
 if ENABLE_PYINSTRUMENT:
-    MIDDLEWARE += ["pyinstrument.middleware.ProfilerMiddleware"]
+    MIDDLEWARE.append("pyinstrument.middleware.ProfilerMiddleware")
     SECURE_CSP["script-src"].append(CSP.UNSAFE_INLINE)
 
 if ENABLE_SENTRY:

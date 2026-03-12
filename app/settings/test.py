@@ -1,6 +1,19 @@
 from __future__ import annotations
 
-from .base import *  # noqa: F403
+from typing import Any
+
+from . import base as base_settings
+
+
+def _copy_base_settings() -> dict[str, Any]:
+    return {
+        name: value
+        for name, value in vars(base_settings).items()
+        if name.isupper()
+    }
+
+
+globals().update(_copy_base_settings())
 
 DEBUG = False
 TEST = True
@@ -29,7 +42,7 @@ OTEL_SDK_DISABLED = True
 
 INSTALLED_APPS = [
     app
-    for app in INSTALLED_APPS  # noqa: F405
+    for app in base_settings.INSTALLED_APPS
     if app
     not in {
         "health_check",
@@ -48,7 +61,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     middleware
-    for middleware in MIDDLEWARE  # noqa: F405
+    for middleware in base_settings.MIDDLEWARE
     if middleware
     not in {
         "silk.middleware.SilkyMiddleware",
