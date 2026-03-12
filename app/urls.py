@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls.static import static
+from django.conf.urls.static import static  # type: ignore
 from django.contrib import admin
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
@@ -7,7 +7,7 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 from django_ratelimit.exceptions import Ratelimited
 
-from app.views.home import HomeView
+from app.ninja_api import api
 
 
 def not_found() -> HttpResponse:
@@ -42,7 +42,6 @@ def handler500(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("app.account.urls")),
-    path("", HomeView.as_view(), name="home"),
     # Text and xml static files:
     path(
         "robots.txt",
@@ -62,6 +61,7 @@ urlpatterns = [
         prefix=settings.STATIC_URL,
         document_root=settings.STATIC_ROOT,
     ),
+    path("api/", api.urls),
 ]
 
 if settings.DEBUG:  # pragma: no cover
@@ -90,7 +90,7 @@ if getattr(settings, "ENABLE_HEALTH_CHECK", False):
 
     redis_check = (
         "health_check.contrib.redis.Redis",
-        {"client": Redis.from_url(settings.REDIS_URL)},
+        {"client": Redis.from_url(settings.REDIS_URL)},  # type: ignore
     )
 
     health_checks = [
