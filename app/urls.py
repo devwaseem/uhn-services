@@ -41,7 +41,7 @@ def handler500(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path("", include("app.account.urls")),
+    # path("", include("app.account.urls")), # noqa
     # Text and xml static files:
     path(
         "robots.txt",

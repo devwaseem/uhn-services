@@ -7,7 +7,8 @@ from app.ariba.auth import AribaOAuthToken
 _BASE_URL = "https://openapi.ariba.com/api/sourcing-reporting-details/v1/prod"
 
 
-class ContractWorkspaceAuthenticationError(Exception): ...
+class ContractWorkspaceAuthenticationError(Exception):
+    ...
 
 
 async def get_view(

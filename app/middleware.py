@@ -22,13 +22,15 @@ def disable_client_side_caching_middleware(
 @overload
 def csp_excluder(
     get_response: Callable[[HttpRequest], HttpResponse],
-) -> Callable[[HttpRequest], HttpResponse]: ...
+) -> Callable[[HttpRequest], HttpResponse]:
+    ...
 
 
 @overload
 def csp_excluder(
     get_response: Callable[[HttpRequest], Awaitable[HttpResponse]],
-) -> Callable[[HttpRequest], Awaitable[HttpResponse]]: ...
+) -> Callable[[HttpRequest], Awaitable[HttpResponse]]:
+    ...
 
 
 def csp_excluder(
