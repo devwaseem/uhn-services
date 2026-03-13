@@ -190,7 +190,11 @@ MIDDLEWARE: list[str] = [
 ]
 
 if STATIC_USE_WHITENOISE:
-    MIDDLEWARE.append("whitenoise.middleware.WhiteNoiseMiddleware")
+    # Insert WhiteNoiseMiddleware after SecurityMiddleware
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index("django.middleware.security.SecurityMiddleware") + 1,
+        "whitenoise.middleware.WhiteNoiseMiddleware",
+    )
 
 ROOT_URLCONF = "app.urls"
 
