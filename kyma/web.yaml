@@ -1,0 +1,156 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: web-authorization-policy
+  namespace: uhn-services
+spec:
+  selector:
+    matchLabels:
+      app: web-service
+  action: ALLOW
+  rules:
+    - {}
+
+---
+
+apiVersion: gateway.kyma-project.io/v2
+kind: APIRule
+metadata:
+  name: web-api-rule
+  namespace: uhn-services
+  labels:
+    app.kubernetes.io/name: APIRule
+spec:
+  gateway: kyma-system/kyma-gateway
+  hosts:
+    - uhn-services
+  service:
+    name: web-service
+    port: 3000
+  rules:
+    - path: /{**}
+      methods:
+        - "GET"
+        - "POST"
+        - "PUT"
+        - "DELETE"
+        - "PATCH"
+        - "HEAD"
+        - "OPTIONS"
+      noAuth: true
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: uhn-services
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: uhn-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      securityContext:
+        fsGroup: 65532
+        fsGroupChangePolicy: "OnRootMismatch"
+      imagePullSecrets:
+        - name: aws-ecr-secret
+      volumes:
+        - name: static-data
+          persistentVolumeClaim:
+            claimName: static-data
+        - name: media-data
+          persistentVolumeClaim:
+            claimName: media-data
+      containers:
+      - name: web
+        image: 302579735403.dkr.ecr.ca-central-1.amazonaws.com/uhn-services:0.3.2
+        ports:
+          - containerPort: 3000
+        envFrom:
+          - configMapRef:
+              name: uhn-services-configmap
+          - secretRef:
+              name: uhn-services-secrets
+        env:
+          - name: DEBUG
+            value: "false"
+          - name: DJANGO_SETTINGS_MODULE
+            value: "app.settings.prod"
+        volumeMounts:
+          - name: static-data
+            mountPath: /static
+          - name: media-data
+            mountPath: /media
+        command: ["uvicorn"]
+        args:
+          - "app.asgi:application"
+          - "--host"
+          - "0.0.0.0"
+          - "--port"
+          - "3000"
+          - "--workers"
+          - "5"
+          - "--limit-max-requests"
+          - "2000"
+          - "--timeout-keep-alive"
+          - "90"
+          - "--log-level"
+          - "info"
+          - "--no-server-header"
+          - "--lifespan"
+          - "off"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: static-data
+  namespace: uhn-services
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  storageClassName: default
+  resources:
+    requests:
+      storage: 200Mi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-data
+  namespace: uhn-services
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  storageClassName: default
+  resources:
+    requests:
+      storage: 200Mi

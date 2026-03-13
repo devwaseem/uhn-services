@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uhn-services-configmap
+  namespace: uhn-services
+data:
+  ENABLE_OTEL: "false"
+  ALLOWED_HOSTS: uhn-services.c-330f25a.kyma.ondemand.com
+  CSRF_TRUSTED_ORIGINS: https://uhn-services.c-330f25a.kyma.ondemand.com
+
+  STATIC_LOCATION: "/static"
+  STATIC_USE_WHITENOISE: "true"
+  STATIC_USE_S3: "false"
+  MEDIA_USE_S3: "false"
+
+
+  AWS_ACCESS_KEY_ID: ""
+  AWS_SECRET_ACCESS_KEY: ""
+  AWS_STORAGE_BUCKET_NAME: ""
+  AWS_S3_REGION_NAME: ""
+
+
+  # Security
+  USE_SSL: "false"
+  USE_X_FORWARDED_HOST: "false"
+
+  # Feature Flags
+  ACCOUNT_ALLOW_REGISTRATION: "true"
+
+  # Database
+  DJANGO_DATABASE_HOST: postgres-0.postgres
+  DJANGO_DATABASE_PORT: "5432"
+  POSTGRES_DB: uhn_services
+  POSTGRES_USER: postgres
+  CONN_MAX_AGE: "0"
+
+  # Email
+  EMAIL_BACKEND: django.core.mail.backends.smtp.EmailBackend
+  EMAIL_HOST: ""
+  EMAIL_HOST_PASSWORD: ""
+  EMAIL_HOST_USER: ""
+  EMAIL_PORT: "1025"
+  EMAIL_USE_TLS: "false"
+  DEFAULT_FROM_EMAIL: "UHN <admin@example.com>"
+  SERVER_EMAIL: "UHN <system@example.com>"
+
+  # Celery
+  CELERY_BROKER_URL: redis://redis-0.redis:6379/1
+  CELERY_RESULT_BACKEND: redis://redis-0.redis:6379/1
+
+  # Redis
+  REDIS_HOST: redis-0.redis
+  REDIS_PORT: "6379"
+
+  INVOICE_FLOW_EXTENSION_ID: "UHN_Invoice_FE"
+
+  OPERATIONAL_REPORTING_FOR_SOURCING_API_USERNAME: 0a5f8ece-a79a-4b37-ab0f-5bd4b97868fc
+  OPERATIONAL_REPORTING_FOR_SOURCING_API_REALM: UHN-T
+
+  OPERATIONAL_PROCUREMENT_API_USERNAME: 2af114a5-3d69-4476-b1e2-b998d722bb6c
+  OPERATIONAL_PROCUREMENT_API_REALM: UHN-1-T

@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: uhn-services
+spec:
+  selector:
+    app: postgres
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: uhn-services
+spec:
+  serviceName: postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+        namespace: uhn-services
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        storageClassName: default
+        resources:
+          requests:
+            storage: 100Mi
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:17
+        ports:
+          - containerPort: 5432
+        env:
+          - name: "POSTGRES_USER"
+            value: "postgres"
+          - name: "POSTGRES_PASSWORD"
+            valueFrom:
+              secretKeyRef:
+                name: uhn-services-secrets
+                key: POSTGRES_PASSWORD
+        volumeMounts:
+          - name: postgres-data
+            mountPath: /var/lib/postgresql
+
