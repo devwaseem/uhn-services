@@ -6,8 +6,8 @@ from django.http import HttpRequest, JsonResponse
 from ninja import Query, Router
 
 from app.api_auth.permissions import (
-    AllowedSolutions,
-    SolutionAuth,
+    AllowedScopes,
+    ScopedAuth,
 )
 from app.ariba import operational_procurement
 from app.ariba.auth import AribaOAuthManager
@@ -28,7 +28,7 @@ _EXAMPLE_DATE = datetime.now(tz=timezone.utc).date()
 
 @router.get(
     path="/non-po-invoices/",
-    auth=SolutionAuth(solution_name=AllowedSolutions.NON_PO_INVOICES),
+    auth=ScopedAuth(scope_code=AllowedScopes.NON_PO_INVOICES_READ),
 )
 async def non_po_invoices(
     request: HttpRequest,  # noqa

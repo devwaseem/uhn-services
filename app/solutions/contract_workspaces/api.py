@@ -3,8 +3,8 @@ from django.http import HttpRequest, JsonResponse
 from ninja import Router
 
 from app.api_auth.permissions import (
-    AllowedSolutions,
-    SolutionAuth,
+    AllowedScopes,
+    ScopedAuth,
 )
 from app.ariba import contract_workspace
 from app.ariba.auth import AribaOAuthManager
@@ -22,7 +22,7 @@ _REALM: str = Env.str("OPERATIONAL_REPORTING_FOR_SOURCING_API_REALM")  # type: i
 
 @router.get(
     "/",
-    auth=SolutionAuth(solution_name=AllowedSolutions.CONTRACT_WORKSPACES),
+    auth=ScopedAuth(scope_code=AllowedScopes.CONTRACT_WORKSPACES_READ),
 )
 async def contract_workspaces(
     request: HttpRequest,  # noqa
