@@ -2,19 +2,19 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from app.flow_extension_api.credential import FlowExtensionCredential
-from app.flow_extension_api.exceptions import (
+from app.flow_extension.credential import FlowExtensionCredential
+from app.flow_extension.exceptions import (
     FlowExtensionAuthFailedError,
     FlowExtensionRateLimitError,
 )
-from app.flow_extension_api.repository import (
+from app.flow_extension.repository import (
     get_pending_flow_extension_events,
 )
 
 
 def test_returns_events_correctly_if_found_for_status_code_200() -> None:
     with patch(
-        "app.flow_extension_api.repository.httpx.get"
+        "app.flow_extension.repository.httpx.get"
     ) as mock_httpx_get:
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -49,7 +49,7 @@ def test_returns_events_correctly_if_found_for_status_code_200() -> None:
 
 def test_returns_empty_events_for_status_code_204() -> None:
     with patch(
-        "app.flow_extension_api.repository.httpx.get"
+        "app.flow_extension.repository.httpx.get"
     ) as mock_httpx_get:
         mock_response = MagicMock()
         mock_response.status_code = 204
@@ -69,7 +69,7 @@ def test_returns_empty_events_for_status_code_204() -> None:
 
 def test_throws_auth_failed_error_for_status_code_401() -> None:
     with patch(
-        "app.flow_extension_api.repository.httpx.get"
+        "app.flow_extension.repository.httpx.get"
     ) as mock_httpx_get:
         mock_response = MagicMock()
         mock_response.status_code = 401
@@ -88,7 +88,7 @@ def test_throws_auth_failed_error_for_status_code_401() -> None:
 
 def test_throws_rate_limit_error_for_status_code_429() -> None:
     with patch(
-        "app.flow_extension_api.repository.httpx.get"
+        "app.flow_extension.repository.httpx.get"
     ) as mock_httpx_get:
         mock_response = MagicMock()
         mock_response.status_code = 429

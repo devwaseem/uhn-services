@@ -1,7 +1,5 @@
 import shutil
 import tempfile
-from datetime import datetime
-from pathlib import Path
 from typing import Any, Callable, NamedTuple
 from uuid import uuid4
 
@@ -9,22 +7,17 @@ import structlog
 from celery import Task
 
 from app.celery import app
-from app.flow_extension_api.credential import INVOICE_FLOW_EXTENSION_CREDENTIAL
-from app.flow_extension_api.exceptions import FlowExtensionRateLimitError
-from app.flow_extension_api.models import (
+from app.flow_extension.credential import INVOICE_FLOW_EXTENSION_CREDENTIAL
+from app.flow_extension.exceptions import FlowExtensionRateLimitError
+from app.flow_extension.models import (
     FlowExtensionHandlerActionResult,
     FlowExtensionHandlerNextAction,
 )
-from app.flow_extension_api.repository import (
+from app.flow_extension.repository import (
     FlowExtensionEventRepository,
     get_pending_flow_extension_events,
 )
-from app.invoice_date_detection.tasks import (
-    verify_date_on_cxml_matches_date_on_invoice_pdf,
-)
-from app.ship_to_detection.tasks import (
-    verify_ship_to_address,
-)
+from app.solutions.ship_to_detection.tasks import verify_ship_to_address
 
 logger = structlog.get_logger(__name__)
 
@@ -38,7 +31,7 @@ FlowExtensionHandler = Callable[..., FlowExtensionHandlerActionResult]
     retry_jitter=True,
     retry_backoff_max=60 * 60,  # 60 minutes
 )
-def check_and_handle_invoice_from_flow_extension_api() -> None:
+def check_and_handle_invoice_from_flow_extension() -> None:
     current_logger = logger.bind(reference=str(uuid4()))
     current_logger.info("Checking flow extension for Invoice based events")
     new_events = get_pending_flow_extension_events(
@@ -87,10 +80,6 @@ def handle_flow_extension_event(event_id: str) -> None:
     ]
 
     invoice_id = invoice_detail_request_header["invoiceID"]
-    invoice_date_str = invoice_detail_request_header["invoiceDate"]
-
-    invoice_date = datetime.fromisoformat(invoice_date_str).date()
-    attachment = event_data.attachment
 
     process_pipeline: list[ProcessPipelineItem] = [
         ProcessPipelineItem(
@@ -99,34 +88,6 @@ def handle_flow_extension_event(event_id: str) -> None:
             kwargs={"event_data": event_data},
         )
     ]
-    if attachment:
-        if attachment.content_type == "application/pdf":
-            file_path = Path(tempdir) / "invoice.pdf"
-            event.save_attachment_to_file(
-                cid=attachment.cid,
-                file_path=file_path,
-            )
-            current_logger.info(
-                "Invoice attachment saved",
-                file_path=str(file_path),
-                invoice_id=invoice_id,
-            )
-            process_pipeline.append(
-                ProcessPipelineItem(
-                    priority=200,
-                    task=verify_date_on_cxml_matches_date_on_invoice_pdf,
-                    kwargs={
-                        "invoice_id": invoice_id,
-                        "invoice_date_on_cxml": invoice_date,
-                        "pdf_path": str(file_path),
-                    },
-                )
-            )
-        else:
-            current_logger.warning(
-                "Invoice Date match not supported for " "attachment type: %s",
-                attachment.content_type,
-            )
 
     process_pipeline.sort(key=lambda x: x.priority)
     for process in process_pipeline:

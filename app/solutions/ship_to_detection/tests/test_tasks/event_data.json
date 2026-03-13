@@ -1,0 +1,371 @@
+{
+    "DataRequest": {
+        "eventId": "vwCDqtDoS4OtCz4BK-zi0g",
+        "extension": "UHN_Invoice_FE",
+        "Reference": {
+            "ReferencedHeader": "",
+            "content": "$ref"
+        },
+        "Source": {
+            "SourceHeader": {
+                "ToANId": "AN01756416956-T",
+                "PayloadId": "1723469094583-13752184244692840@10.209.37.84",
+                "FromANId": "AN11203766994-T",
+                "Version": "1.2.062",
+                "SystemId": "http://xml.cxml.org/schemas/cXML/1.2.062/InvoiceDetail.dtd",
+                "Timestamp": "2024-08-12T06:24:54-07:00"
+            },
+            "Request": {
+                "InvoiceDetailRequest": {
+                    "InvoiceDetailSummary": {
+                        "SubtotalAmount": {
+                            "Money": {
+                                "alternateAmount": 15,
+                                "currency": "USD",
+                                "alternateCurrency": "USD",
+                                "content": 15
+                            }
+                        },
+                        "NetAmount": {
+                            "Money": {
+                                "currency": "USD",
+                                "content": 15
+                            }
+                        },
+                        "DueAmount": {
+                            "Money": {
+                                "alternateAmount": 15,
+                                "currency": "USD",
+                                "alternateCurrency": "USD",
+                                "content": 15
+                            }
+                        },
+                        "Tax": {
+                            "Money": {
+                                "alternateAmount": 0,
+                                "currency": "USD",
+                                "alternateCurrency": "USD",
+                                "content": 0
+                            },
+                            "Description": {
+                                "xml:lang": "en-US"
+                            },
+                            "TaxDetail": {
+                                "TaxAmount": {
+                                    "Money": {
+                                        "alternateAmount": 0,
+                                        "currency": "USD",
+                                        "alternateCurrency": "USD",
+                                        "content": 0
+                                    }
+                                },
+                                "Description": {
+                                    "xml:lang": "en-US"
+                                },
+                                "TaxableAmount": {
+                                    "Money": {
+                                        "currency": "USD",
+                                        "content": 15
+                                    }
+                                },
+                                "category": "hst",
+                                "percentageRate": 0
+                            }
+                        },
+                        "GrossAmount": {
+                            "Money": {
+                                "currency": "USD",
+                                "content": 15
+                            }
+                        }
+                    },
+                    "InvoiceDetailOrder": {
+                        "InvoiceDetailOrderInfo": {
+                            "OrderIDInfo": {
+                                "orderID": ""
+                            }
+                        },
+                        "InvoiceDetailServiceItem": {
+                            "isAdHoc": "yes",
+                            "UnitPrice": {
+                                "Money": {
+                                    "currency": "USD",
+                                    "content": 15
+                                }
+                            },
+                            "Extrinsic": {
+                                "name": "punchinItemFromCatalog",
+                                "content": "no"
+                            },
+                            "quantity": 1,
+                            "InvoiceDetailServiceItemReference": {
+                                "Description": {
+                                    "xml:lang": "en-US",
+                                    "content": "Consulting Services"
+                                },
+                                "lineNumber": 1,
+                                "ItemID": {
+                                    "SupplierPartID": "service 1"
+                                }
+                            },
+                            "UnitOfMeasure": "HUR",
+                            "SubtotalAmount": {
+                                "Money": {
+                                    "currency": "USD",
+                                    "content": 15
+                                }
+                            },
+                            "NetAmount": {
+                                "Money": {
+                                    "currency": "USD",
+                                    "content": 15
+                                }
+                            },
+                            "Period": {
+                                "endDate": "2024-08-15T00:00:00+05:30",
+                                "startDate": "2024-08-12T00:00:00+05:30"
+                            },
+                            "GrossAmount": {
+                                "Money": {
+                                    "currency": "USD",
+                                    "content": 15
+                                }
+                            },
+                            "invoiceLineNumber": 1
+                        }
+                    },
+                    "InvoiceDetailRequestHeader": {
+                        "InvoiceDetailLineIndicator": "",
+                        "InvoiceDetailShipping": {
+                            "Contact": [
+                                {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "US-NC",
+                                            "content": "NC"
+                                        },
+                                        "Street": [
+                                            "SUITE 404 1502 W NC HIGHWAY 54",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": 27707,
+                                        "Country": {
+                                            "isoCountryCode": "US",
+                                            "content": "United States"
+                                        },
+                                        "City": "DURHAM"
+                                    },
+                                    "role": "shipFrom",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "MEDOC ADVANCED MEDICAL SYSTEMS-TEST"
+                                    }
+                                },
+                                {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "CA-ON",
+                                            "content": "{{ ship_to_state }}"
+                                        },
+                                        "Street": [
+                                            "{{ ship_to_street }}",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": "{{ ship_to_postal_code }}",
+                                        "Country": {
+                                            "isoCountryCode": "CA",
+                                            "content": "{{ ship_to_country }}"
+                                        },
+                                        "City": "{{ ship_to_city }}"
+                                    },
+                                    "role": "shipTo",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "{{ ship_to_name }}"
+                                    }
+                                }
+                            ]
+                        },
+                        "InvoicePartner": [
+                            {
+                                "IdReference": {
+                                    "identifier": "009988",
+                                    "domain": "supplierTaxID"
+                                },
+                                "Contact": {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "US-NC",
+                                            "content": "NC"
+                                        },
+                                        "Street": [
+                                            "SUITE 404 1502 W NC HIGHWAY 54",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": 27707,
+                                        "Country": {
+                                            "isoCountryCode": "US",
+                                            "content": "United States"
+                                        },
+                                        "City": "DURHAM"
+                                    },
+                                    "role": "remitTo",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "MEDOC ADVANCED MEDICAL SYSTEMS-TEST"
+                                    }
+                                }
+                            },
+                            {
+                                "Contact": {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "CA-ON",
+                                            "content": "ON"
+                                        },
+                                        "Street": [
+                                            "190 Elizabeth Street",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": "M5G 2C4",
+                                        "Country": {
+                                            "isoCountryCode": "CA",
+                                            "content": "Canada"
+                                        },
+                                        "City": "Toronto"
+                                    },
+                                    "role": "billTo",
+                                    "addressID": "UHN",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "University Health Network"
+                                    }
+                                }
+                            },
+                            {
+                                "Contact": {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "US-NC",
+                                            "content": "NC"
+                                        },
+                                        "Street": [
+                                            "SUITE 404 1502 W NC HIGHWAY 54",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": 27707,
+                                        "Country": {
+                                            "isoCountryCode": "US",
+                                            "content": "United States"
+                                        },
+                                        "City": "DURHAM"
+                                    },
+                                    "role": "from",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "MEDOC ADVANCED MEDICAL SYSTEMS-TEST"
+                                    }
+                                }
+                            },
+                            {
+                                "Contact": {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "US-NC",
+                                            "content": "NC"
+                                        },
+                                        "Street": [
+                                            "SUITE 404 1502 W NC HIGHWAY 54",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": 27707,
+                                        "Country": {
+                                            "isoCountryCode": "US",
+                                            "content": "United States"
+                                        },
+                                        "City": "DURHAM"
+                                    },
+                                    "role": "billFrom",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "MEDOC ADVANCED MEDICAL SYSTEMS-TEST"
+                                    }
+                                }
+                            },
+                            {
+                                "Contact": {
+                                    "PostalAddress": {
+                                        "State": {
+                                            "isoStateCode": "CA-ON",
+                                            "content": "ON"
+                                        },
+                                        "Street": [
+                                            "190 Elizabeth Street",
+                                            "",
+                                            "",
+                                            ""
+                                        ],
+                                        "PostalCode": "M5G 2C4",
+                                        "Country": {
+                                            "isoCountryCode": "CA",
+                                            "content": "Canada"
+                                        },
+                                        "City": "Toronto"
+                                    },
+                                    "role": "soldTo",
+                                    "Name": {
+                                        "xml:lang": "en-US",
+                                        "content": "University Health Network - TEST"
+                                    }
+                                }
+                            }
+                        ],
+                        "Extrinsic": [
+                            {
+                                "name": "invoiceSourceDocument",
+                                "content": "NoOrderInformation"
+                            },
+                            {
+                                "name": "invoiceSubmissionMethod",
+                                "content": "Online"
+                            }
+                        ],
+                        "invoiceOrigin": "supplier",
+                        "purpose": "standard",
+                        "Comments": {
+                            "Attachment": {
+                                "URL": "cid:1924507601.1723468889263@cxml.org"
+                            },
+                            "content": "Test Invoice with Wrong Ship to from Ariba"
+                        },
+                        "invoiceID": "INV009988",
+                        "InvoiceDetailHeaderIndicator": "",
+                        "invoiceDate": "2024-08-12T18:54:52+05:30",
+                        "operation": "new"
+                    }
+                },
+                "deploymentMode": "test"
+            },
+            "AttachmentInfo": {
+                "Attachment": {
+                    "ContentType": "application/pdf",
+                    "ContentLength": 38742,
+                    "URI": "/v1/flowextensions/UHN_Invoice_FE/events/vwCDqtDoS4OtCz4BK-zi0g/eventdata/attachment?cid=%3C1924507601.1723468889263%40cxml.org%3E",
+                    "CID": "%3C1924507601.1723468889263%40cxml.org%3E"
+                }
+            }
+        }
+    }
+}

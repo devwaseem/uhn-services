@@ -4,13 +4,13 @@ from pathlib import Path
 
 import httpx
 
-from app.flow_extension_api.credential import FlowExtensionCredential
-from app.flow_extension_api.exceptions import (
+from app.flow_extension.credential import FlowExtensionCredential
+from app.flow_extension.exceptions import (
     FlowExtensionAuthFailedError,
     FlowExtensionEventDataNotFoundError,
     FlowExtensionRateLimitError,
 )
-from app.flow_extension_api.models import (
+from app.flow_extension.models import (
     FlowExtensionEvent,
     FlowExtensionEventData,
     FlowExtensionEventDataAttachment,
