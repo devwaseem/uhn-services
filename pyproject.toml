@@ -71,6 +71,7 @@ dependencies = [
   "httpx>=0.28.1",
   "django-ninja>=1.5.3",
   "orjson>=3.11.7",
+  "cryptography>=46.0.4",
 ]
 
 
