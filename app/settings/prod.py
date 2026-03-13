@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from typing import Any, cast
 
 from django.core.exceptions import ImproperlyConfigured
@@ -58,7 +57,7 @@ SECURE_CROSS_ORIGIN_RESOURCE_POLICY = Env.str(
     default="same-site",
 )
 
-LOGGING = deepcopy(base_settings.LOGGING)
+LOGGING = base_settings.LOGGING
 LOGGING["handlers"]["json_console"]["formatter"] = "json"
 
 for logger_name, logger_config in cast(
