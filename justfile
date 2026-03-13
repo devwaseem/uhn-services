@@ -1,11 +1,11 @@
 dev:
-  LOG_DB=true uv run python manage.py runserver_plus 0.0.0.0:8000
+  LOG_DB=true uv run --env-file .env python manage.py runserver_plus 0.0.0.0:8000
 
 vite:
   npm run dev
 
 test *ARGS:
-    TEST=true PYTHONBREAKPOINT=ipdb.set_trace uv run pytest -s  {{ ARGS }}
+    TEST=true PYTHONBREAKPOINT=ipdb.set_trace uv run --env-file .env pytest -s  {{ ARGS }}
 
 lint:
   uv run pre-commit run --all-files
@@ -27,31 +27,31 @@ typecheck *ARGS:
   uv run basedpyright {{ ARGS }}
 
 celery:
-  LOG_DB=true uv run watchmedo auto-restart --directory=app --recursive --pattern '*.py' -- celery --app app worker -E -l INFO -Q celery --pool gevent --concurrency 20
+  LOG_DB=true uv run --env-file .env watchmedo auto-restart --directory=app --recursive --pattern '*.py' -- celery --app app worker -E -l INFO -Q celery --pool gevent --concurrency 20
 
 celery-beat:
-  LOG_DB=true uv run celery --app app beat -l INFO
+  LOG_DB=true uv run --env-file .env celery --app app beat -l INFO
 
 flower:
-  LOG_DB=true uv run celery --app app flower
+  LOG_DB=true uv run --env-file .env celery --app app flower
 
 makemigrations *ARGS:
-  uv run python manage.py makemigrations {{ ARGS }}
+  uv run --env-file .env python manage.py makemigrations {{ ARGS }}
 
 migrate *ARGS:
-  uv run python manage.py migrate {{ ARGS }}
+  uv run --env-file .env python manage.py migrate {{ ARGS }}
 
 dbshell *ARGS:
-  uv run python manage.py dbshell {{ ARGS }}
+  uv run --env-file .env python manage.py dbshell {{ ARGS }}
 
 lab:
-  LOG_DB=true DJANGO_ALLOW_ASYNC_UNSAFE=true uv run python manage.py shell_plus --lab --no-browser
+  LOG_DB=true DJANGO_ALLOW_ASYNC_UNSAFE=true uv run --env-file .env python manage.py shell_plus --lab --no-browser
 
 notebook:
-  LOG_DB=true DJANGO_ALLOW_ASYNC_UNSAFE=true uv run python manage.py shell_plus --notebook --no-browser
+  LOG_DB=true DJANGO_ALLOW_ASYNC_UNSAFE=true uv run --env-file .env python manage.py shell_plus --notebook --no-browser
 
 shell:
-  uv run python manage.py shell_plus
+  uv run --env-file .env python manage.py shell_plus
 
 up *ARGS:
   docker-compose -f development.yml up -d {{ ARGS }}

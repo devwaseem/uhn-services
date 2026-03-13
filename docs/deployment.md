@@ -4,14 +4,21 @@
 
 - Set `SECRET_KEY`, `ALLOWED_HOSTS`, and `USE_SSL=true`
 - Provide `CSRF_TRUSTED_ORIGINS`
-- Run: `uv run python manage.py check --deploy`
+- Run (local/dev): `uv run --env-file .env python manage.py check --deploy`
+- Run (production): `python manage.py check --deploy` with env vars provided by your platform
 
 ## Static & Media Strategy
 
 ### Local/Whitenoise
 
 - Set `STATIC_USE_WHITENOISE=true`
-- Run `python manage.py collectstatic`
+- Run `uv run --env-file .env python manage.py collectstatic` for local/dev workflows
+
+## Environment Loading
+
+- `.env` is not auto-loaded by plain `python manage.py ...` commands.
+- For local development, prefer `uv run --env-file .env ...`.
+- In production, inject environment variables through your runtime/orchestrator.
 
 ### S3-backed
 

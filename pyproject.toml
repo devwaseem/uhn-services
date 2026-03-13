@@ -146,7 +146,7 @@ reportAny = false
 reportUnusedCallResult = false
 
 include = ["app", "frontend", "manage.py"]
-exclude = ["**/node_modules", "**/__pycache__", "env", ".venv", "**/tests"]
+exclude = ["**/node_modules", "**/__pycache__", "env", ".venv", "**/tests", "**/migrations"]
 
 [tool.djlint]
 custom_html = "mjml,mj-head,mj-\\w+"

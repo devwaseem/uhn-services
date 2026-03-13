@@ -31,12 +31,10 @@ class _Env:
         raise ImproperlyConfigured(msg)
 
     @overload
-    def str(self, var: str) -> str:
-        ...
+    def str(self, var: str) -> str: ...
 
     @overload
-    def str(self, var: str, default: str) -> str:
-        ...
+    def str(self, var: str, default: str) -> str: ...
 
     def str(self, var: str, default: str | None = None) -> str:
         value = self._raw(var, default)
@@ -46,12 +44,10 @@ class _Env:
         return str(value)
 
     @overload
-    def int(self, var: str) -> int:
-        ...
+    def int(self, var: str) -> int: ...
 
     @overload
-    def int(self, var: str, default: int) -> int:
-        ...
+    def int(self, var: str, default: int) -> int: ...
 
     def int(self, var: str, default: int | None = None) -> int:
         value = self._raw(var, default)
@@ -68,12 +64,10 @@ class _Env:
             raise ImproperlyConfigured(msg) from exc
 
     @overload
-    def float(self, var: str) -> float:
-        ...
+    def float(self, var: str) -> float: ...
 
     @overload
-    def float(self, var: str, default: float) -> float:
-        ...
+    def float(self, var: str, default: float) -> float: ...
 
     def float(self, var: str, default: float | None = None) -> float:
         value = self._raw(var, default)
@@ -90,12 +84,10 @@ class _Env:
             raise ImproperlyConfigured(msg) from exc
 
     @overload
-    def bool(self, var: str) -> bool:
-        ...
+    def bool(self, var: str) -> bool: ...
 
     @overload
-    def bool(self, var: str, default: bool) -> bool:
-        ...
+    def bool(self, var: str, default: bool) -> bool: ...
 
     def bool(self, var: str, default: bool | None = None) -> bool:
         value = self._raw(var, default)
