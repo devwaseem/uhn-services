@@ -27,7 +27,7 @@ app.config_from_object("app.celeryconfig")
 app.steps["worker"].add(DjangoStructLogInitStep)
 
 packages = [
-    "app.tasks",
+    "app.flow_extension.tasks",
 ]
 
 app.autodiscover_tasks(packages=packages)
@@ -39,8 +39,7 @@ def setup_celery_logging(**_kwargs: Any) -> None:
 
 
 @app.on_after_configure.connect
-def setup_periodic_tasks(_sender: Any, **_kwargs: Any) -> None:
-    ...
+def setup_periodic_tasks(_sender: Any, **_kwargs: Any) -> None: ...
 
 
 @worker_process_init.connect(weak=False)

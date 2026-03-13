@@ -22,6 +22,3 @@ broker_channel_error_retry = True
 if settings.TEST:
     task_always_eager = True
     task_eager_propagates = True
-
-
-imports = ("app.tasks",)
