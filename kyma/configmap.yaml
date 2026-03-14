@@ -5,6 +5,8 @@ metadata:
   namespace: uhn-services
 data:
   ENABLE_OTEL: "false"
+  ENABLE_HEALTH_CHECK: "true"
+
   ALLOWED_HOSTS: uhn-services.c-330f25a.kyma.ondemand.com
   CSRF_TRUSTED_ORIGINS: https://uhn-services.c-330f25a.kyma.ondemand.com
 
