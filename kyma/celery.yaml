@@ -21,7 +21,7 @@ spec:
       terminationGracePeriodSeconds: 300
       containers:
         - name: celery
-          image: 302579735403.dkr.ecr.ca-central-1.amazonaws.com/uhn-services:0.3.2
+          image: 302579735403.dkr.ecr.ca-central-1.amazonaws.com/uhn-services:0.3.4
           envFrom:
             - configMapRef:
                 name: uhn-services-configmap
@@ -32,6 +32,31 @@ spec:
               value: "false"
             - name: DJANGO_SETTINGS_MODULE
               value: "app.settings.prod"
+            - name: DJANGO_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-managed-17-credentials
+                  key: hostname
+            - name: DJANGO_DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-managed-17-credentials
+                  key: port
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-managed-17-credentials
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-managed-17-credentials
+                  key: password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-managed-17-credentials
+                  key: dbname
           command: ["celery"]
           args:
             - "--app"
