@@ -472,7 +472,7 @@ STATICFILES_FINDERS = [
 ]
 
 # CSP (Django built-in)
-CSP_EXCLUDE_PATH_PREFIXES = ["/admin", "/api/docs"]
+CSP_EXCLUDE_PATH_PREFIXES = ["/admin", "/healthz", "/api/docs"]
 
 SECURE_CSP: dict[str, list[str]] = {
     "default-src": [CSP.SELF],
