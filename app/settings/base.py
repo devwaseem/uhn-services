@@ -170,8 +170,6 @@ MIDDLEWARE: list[str] = [
     "django.middleware.csp.ContentSecurityPolicyMiddleware",
     # Django:
     "django.middleware.security.SecurityMiddleware",
-    # django-permissions-policy
-    "django_permissions_policy.PermissionsPolicyMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -179,8 +177,6 @@ MIDDLEWARE: list[str] = [
     # "allauth.account.middleware.AccountMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # Django HTMX
-    "django_htmx.middleware.HtmxMiddleware",
     # "django.middleware.cache.FetchFromCacheMiddleware",  # This must be last
 ]
 
