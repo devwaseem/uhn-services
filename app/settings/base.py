@@ -118,10 +118,6 @@ PERMISSIONS_POLICY: dict[str, str | list[str]] = {}
 ADMIN_APPS = [
     "admin_interface",
     "colorfield",
-    # "unfold",  # before django.contrib.admin
-    # "unfold.contrib.filters",  # optional, if special filters are needed
-    # "unfold.contrib.forms",  # optional, if special form elements are needed
-    # "unfold.contrib.inlines",  # optional, if special inlines are needed
     "django.contrib.admin",
 ]
 
@@ -145,7 +141,6 @@ THIRD_PARTY_APPS: list[str] = [
     "django_object_actions",  # https://github.com/crccheck/django-object-actions
     "solo",  # https://github.com/lazybird/django-solo
     "widget_tweaks",  # django-widget-tweaks
-    "phonenumber_field",
 ]
 
 PROJECT_APPS: list[str] = [
